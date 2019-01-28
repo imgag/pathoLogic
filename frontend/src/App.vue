@@ -12,7 +12,7 @@
           <v-flex text-xs-center>
             <v-list light>
               <template v-for="(project) in $store.getters.projects">
-                <project v-bind="project" v-bind:key="project.id"></project>
+                <project v-bind="project" v-bind:key="project.id" @startProject="startProject"></project>
               </template>
             </v-list>
           </v-flex>
@@ -64,7 +64,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn flat color="primary" @click="dialog = false">Cancel</v-btn>
-          <v-btn flat @click="dialog = false">Create</v-btn>
+          <v-btn flat @click="createProject">Create</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -72,6 +72,7 @@
 </template>
 
 <script>
+const addr = "http://localhost:8000/v1/"
 import Project from '@/components/Project.vue'
 
 export default {
@@ -90,6 +91,55 @@ export default {
         probe_type: "",
         email: ""
       }
+    }
+  },
+  methods: {
+    createProject () {
+      let vm = this
+      fetch(`${addr}/put`, {
+        method: 'PUT',
+        body: JSON.stringify(vm.draft_project)
+      }).then((response) => response.json()).then((project) => {
+        vm.$store.commit('addProject', project)
+        vm.dialog = false
+      })
+    },
+    startProject (id) {
+      let vm = this
+      fetch(`${addr}/project/${id}/start`, { // start job
+        method: 'PATCH'
+      }).then((response) => {
+        console.debug(response.status) // eslint-disable-line
+        return Promise.resolve()
+      }).then(() => { // update status
+        fetch(`${addr}/status/${id}`).then((response) => response.json()).then((status) => {
+          vm.$store.commit('addStatus', status)
+        })
+      })
+    }
+  },
+  mounted () {
+    let vm = this
+
+    if (window.webpackHotUpdate) {
+      vm.$store.commit('addProject', {
+        "id": 1,
+        "email": "lennard.berger@student.uni-tuebingen.de",
+        "created_at": new Date(),
+        "last_updated": new Date(),
+      })
+      vm.$store.commit('addStatus', {
+        "id": 1,
+        "status": "created"
+      })
+    } else {
+      fetch(`${addr}/project`).then((response) => response.json()).then((projects) => { // fetch projects
+        return Promise.resolve(vm.$store.commit('addProjects', projects))
+      }).then(() => fetch(`${addr}/status`)).then((response) => response.json()).then((result) => { // fetch status
+        result.forEach((status) => {
+          vm.$store.commit('addStatus', status)
+        })
+      })
     }
   }
 }

@@ -11,6 +11,9 @@
                         <status :status="status"></status>
                     </div>
                 </v-layout>
+                <v-card-actions v-if="status">
+                    <v-btn flat color="red" v-if="!started" @click="startProject">Start analysis</v-btn>
+                </v-card-actions>
             </div>
         </v-card-title>
     </v-card>
@@ -23,6 +26,17 @@ export default {
     name: "Project",
     components: {
         Status
+    },
+    methods: {
+        startProject () {
+            this.started = true
+            this.$emit('startProject', this.id)
+        }
+    },
+    data () {
+        return {
+          started: false
+        }
     },
     props: {
         id: Number,

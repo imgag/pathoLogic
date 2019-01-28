@@ -5,15 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    projects: [
-      {
-        "id": 1,
-        "email": "lennard.berger@student.uni-tuebingen.de",
-        "created_at": new Date(),
-        "last_updated": new Date(),
-        "status": "created"
-      }
-    ],
+    projects: [],
     filterForDate: null,
     filterForId: null
   },
@@ -23,6 +15,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    addProjects (state, projects) {
+      state.projects = projects
+    },
     addProject (state, project) {
       state.projects.push(project)
     },
@@ -31,9 +26,7 @@ export default new Vuex.Store({
       let index = state.projects.indexOf(project)
       state.projects[index] = {
         ...project,
-        status: {
-          ...status.status
-        }
+        status: status.status
       }
     }
   }
