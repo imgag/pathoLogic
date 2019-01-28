@@ -72,7 +72,7 @@
 </template>
 
 <script>
-const addr = "http://localhost:8000/v1/"
+const addr = "http://localhost:4010/v1/"
 import Project from '@/components/Project.vue'
 
 export default {

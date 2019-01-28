@@ -8,4 +8,7 @@ Vuetify is used with `vue-cli`. See more in the [frontend folder](./frontend/REA
 
 ### Mocking REST API
 
-You can use [prism](https://github.com/stoplightio/prism)
+You can use [prism](https://github.com/stoplightio/prism) like this
+```
+docker run -v $PWD:/code/ -p 4010:4010 -it stoplight/prism mock --spec /code/swagger.yaml
+```
