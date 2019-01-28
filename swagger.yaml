@@ -140,7 +140,11 @@ definitions:
       last_updated:
         type: "string"
         format: "date"
-
+      probe_type:
+        type: "string"
+        enum:
+        - single
+        - multiple
 externalDocs:
   description: "Find out more about metabiom"
   url: "http://github.com"

@@ -1,11 +1,37 @@
 <template>
-    
+    <v-card>
+        <v-card-title primary-title>
+            <div>
+                <h3 class="headline mb-0">Probe #{{ id }}</h3>
+                <div>Some more info about the probe, e.g <span>{{ author_email }}</span> wrote this.</div>
+                <v-layout row wrap>
+                    <v-chip xs6>Last update: {{ last_updated }}</v-chip>
+                    <v-chip xs6>Created: {{ created_at }}</v-chip>
+                    <div v-if="status">
+                        <status :status="status"></status>
+                    </div>
+                </v-layout>
+            </div>
+        </v-card-title>
+    </v-card>
 </template>
 
 <script>
-    export default {
-        name: "Project.vue"
+import Status from '@/components/Status.vue'
+
+export default {
+    name: "Project",
+    components: {
+        Status
+    },
+    props: {
+        id: Number,
+        author_email: String,
+        created_at: Date,
+        last_updated: Date,
+        status: String
     }
+}
 </script>
 
 <style scoped>
