@@ -5,7 +5,6 @@
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
-
         <router-view></router-view> 
       </v-container>
     </v-content>
