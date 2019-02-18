@@ -6,12 +6,19 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     samples: [],
-    filterForDate: null,
-    filterForId: null
+    sample_filter_by_ids: []
   },
   getters: {
     samples (state) {
-      return state.samples
+      return (state.sample_filter_by_ids.length) ? state.samples.filter((s) => {
+        return state.sample_filter_by_ids.includes(s.id)
+      }) : state.samples
+    },
+    sample_ids (state) {
+      return state.samples.map((s) => s.id)
+    },
+    author_emails (state) {
+      return new Set(state.samples.map((s) => s.author_email))
     }
   },
   mutations: {
@@ -25,6 +32,9 @@ export default new Vuex.Store({
         ...sample,
         status: status.status
       }
+    },
+    updateFilterIDs (state, ids) {
+      state.sample_filter_by_ids = ids
     }
   }
 })

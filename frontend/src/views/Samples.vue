@@ -3,7 +3,21 @@
     justify-center
     align-top
   >
-  <v-flex text-xs-center>
+
+  <v-flex
+    xs20
+    mr-2
+  >
+  <v-autocomplete
+      v-model="filter_ids"
+      :multiple="true"
+      hint="Filter by sample id"
+      :items="$store.getters.sample_ids"
+      persistent-hint
+  />
+  </v-flex>
+
+  <v-flex xs12>
     <v-data-table
       :headers="headers"
       :items="$store.getters.samples"
@@ -62,7 +76,13 @@ export default {
           sortable: true,
           value: 'status'
         }
-      ]
+      ],
+      filter_ids: []
+    }
+  },
+  watch: {
+    filter_ids () {
+      this.$store.commit('updateFilterIDs', Object.values(this.filter_ids))
     }
   },
   mounted () {
