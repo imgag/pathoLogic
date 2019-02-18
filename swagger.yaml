@@ -11,11 +11,11 @@ info:
 basePath: "/v1"
 tags:
 - name: "sample"
-  description: "Everything about samples"
+  description: "Sample information"
 - name: "status"
   description: "Process status"
 - name: "result"
-  description: "Results about samples"
+  description: "Sample results"
 schemes:
 - "http"
 - "https"
@@ -44,7 +44,7 @@ paths:
     get:
       tags:
       - "status"
-      summary: "Get status for one or more projects"
+      summary: "Get status for one or more samples"
       produces:
       - "application/json"
       parameters:
@@ -129,12 +129,11 @@ paths:
                 type: "string"
               status:
                 $ref: "#/definitions/Status"
-
   /result/{sampleID}:
     get:
       tags:
       - "sample"
-      summary: "Lists results for given ids"
+      summary: "Lists results for given sample"
       parameters:
       - name: "sampleID"
         in: "path"
@@ -177,7 +176,78 @@ definitions:
         type: "integer"
         format: "int64"
         minimum: 1
-        maximum: 10
+        maximum: 40
+        description: "Number of threads per process"
+        required: FALSE
+        default: 5
+      queueSize:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 20
+        description: "Number of concurrent processes"
+        required: FALSE
+        default: 4
+      min_contig_length:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 1000000
+        description: "Length cutoff for contigs in final result" 
+        required: FALSE
+        default: 2000
+      target_shortread_cov:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 200
+        description: "Short reads are subsampled to reach this target coverage"
+        required: FALSE
+        default: 150
+      target_longread_cov:
+        type: "integer"
+        format: "int64"
+        minimum: 1
+        maximum: 200
+        description: "Long reads are subsampled to reach this target coverage"
+        required: FALSE
+        default: 150
+     est_genome_size:
+         type: "integer"
+         format: "int64"
+         minimum: 1
+         maximum: 10000000
+         description: "Estimated approximate final genome size of assembled bacteria. Used for coverage calculations"
+         required: FALSE
+         default: 5300000
+      mode:
+         type: "string"
+         enum:
+           - "all"
+           - "unicycler"
+           - "spades"
+           - "miniasm"
+           - "canu"
+           - "flye"
+         description: "Different assembly methods"
+         required: TRUE
+         default: "unicycler"
+      seq_padding:
+          type: "integer"
+          format: "int64"
+          minimum: 1
+          maximum: 10000
+          description: "Number of bases added at sequence ends to improve alignment quality in plasmid identification"
+          required: FALSE
+          default: 1000
+      covWindow:
+          type: "integer"
+          format: "int64"
+          minimum: 20
+          maximum: 5000
+          description: "Window size for coverage calculation" 
+          required: FALSE
+          default: 50
   Sample:
     type: "object"
     properties:
