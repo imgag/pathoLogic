@@ -180,7 +180,7 @@ definitions:
         description: "Number of threads per process"
         required: FALSE
         default: 5
-      queueSize:
+      queue_size:
         type: "integer"
         format: "int64"
         minimum: 1
@@ -240,7 +240,7 @@ definitions:
           description: "Number of bases added at sequence ends to improve alignment quality in plasmid identification"
           required: FALSE
           default: 1000
-      covWindow:
+      cov_window:
           type: "integer"
           format: "int64"
           minimum: 20
