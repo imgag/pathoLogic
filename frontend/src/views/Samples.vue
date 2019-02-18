@@ -36,8 +36,8 @@ export default {
         "status": "created"
       })
     } else {
-      fetch(`${addr}/project`).then((response) => response.json()).then((projects) => { // fetch projects
-        return Promise.resolve(vm.$store.commit('addProjects', projects))
+      fetch(`${addr}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
+        return Promise.resolve(vm.$store.commit('addSamples', projects))
       }).then(() => fetch(`${addr}/status`)).then((response) => response.json()).then((result) => { // fetch status
         result.forEach((status) => {
           vm.$store.commit('addStatus', status)
