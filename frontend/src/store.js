@@ -5,27 +5,24 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    projects: [],
+    samples: [],
     filterForDate: null,
     filterForId: null
   },
   getters: {
-    projects (state) {
-      return state.projects
+    samples (state) {
+      return state.samples
     }
   },
   mutations: {
-    addProjects (state, projects) {
-      state.projects = projects
-    },
-    addProject (state, project) {
-      state.projects.push(project)
+    addSamples (state, samples) {
+      state.samples = samples
     },
     addStatus (state, status) {
-      let project = state.projects.find((p) => p.id === status.id)
-      let index = state.projects.indexOf(project)
-      state.projects[index] = {
-        ...project,
+      let sample = state.samples.find((s) => s.id === status.id)
+      let index = state.samples.indexOf(sample)
+      state.samples[index] = {
+        ...sample,
         status: status.status
       }
     }

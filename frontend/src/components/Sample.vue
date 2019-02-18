@@ -11,9 +11,6 @@
                         <status :status="status"></status>
                     </div>
                 </v-layout>
-                <v-card-actions v-if="status">
-                    <v-btn flat color="red" v-if="!started" @click="startProject">Start analysis</v-btn>
-                </v-card-actions>
             </div>
         </v-card-title>
     </v-card>
@@ -23,15 +20,9 @@
 import Status from '@/components/Status.vue'
 
 export default {
-    name: "Project",
+    name: "Sample",
     components: {
         Status
-    },
-    methods: {
-        startProject () {
-            this.started = true
-            this.$emit('startProject', this.id)
-        }
     },
     data () {
         return {
