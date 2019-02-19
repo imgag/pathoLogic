@@ -290,24 +290,27 @@ export default {
     },
     saveSamples () {
       let vm = this
+      let samples = vm.samples.map((sample) => {
+        return {
+          ...sample,
+          author_email: vm.author_email,
+          created: new Date().toISOString(),
+          last_updated: new Date().toISOString()
+        }
+      })
+
       fetch(`${proccess.env.ADDR}/projects`, {
         method: 'POST',
         body: JSON.stringify({
           config: config,
-          samples: vm.samples.map((sample) => {
-            return {
-              ...sample,
-              author_email: vm.author_email,
-              created: new Date().toISOString(),
-              last_updated: new Date().toISOString()
-            }
-          })
+          samples: samples
         })
       }).then((response) => { // TODO: Add visual feedback
         if (response.status == 200) {
+          vm.$store.commit('addSamples', samples.map((sample) => sample.status = 'created'))
           vm.$router.push('samples')
         }
-      })
+      }).catch(() => vm.$router.push('samples'))
     }
   }
 }
