@@ -1,5 +1,5 @@
 <template>
-    <v-chip>{{ status_text }}</v-chip>
+    <v-chip :color="color">{{ text }}</v-chip>
 </template>
 
 <script>
@@ -12,17 +12,29 @@
             }
         },
         computed: {
-            status_text () {
+            color () {
+                let color
+
+                if (this.status === 'started') {
+                    color = 'warning'
+                } else if (this.status === 'finished') {
+                    color = 'success'
+                } else if (this.status === 'error') {
+                    color = 'error'
+                }
+                return color
+            },
+            text () {
                 let text
 
                 if (this.status === 'created') {
-                    text = 'Status: created'
+                    text = 'Created'
                 } else if (this.status === 'started') {
-                    text = 'Status: Pipeline'
+                    text = 'Processing'
                 } else if (this.status === 'finished') {
-                    text = 'Status: Done'
+                    text = 'Finished'
                 } else {
-                    text = 'Status: Error'
+                    text = 'Error'
                 }
                 return text
             }

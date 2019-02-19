@@ -216,7 +216,6 @@
 
 <script>
 import Editable from '@/components/Editable.vue'
-const addr = "http://localhost:4010/v1/"
 
 export default {
   components: {
@@ -291,7 +290,7 @@ export default {
     },
     saveSamples () {
       let vm = this
-      fetch(`${addr}/projects`, {
+      fetch(`${proccess.env.ADDR}/projects`, {
         method: 'POST',
         body: JSON.stringify({
           config: config,

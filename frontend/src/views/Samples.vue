@@ -23,7 +23,10 @@
       :items="$store.getters.samples"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.id }}</td>
+        <td v-if="props.item.status === 'finished'">
+          <router-link :to="{ name: 'result', params: { id: props.item.id } }">{{ props.item.id }}</router-link>
+        </td>
+        <td v-else>{{ props.item.id }}</td>
         <td>{{ props.item.author_email }}</td>
         <td>{{ props.item.created }}</td>
         <td>{{ props.item.last_updated }}</td>
@@ -36,7 +39,6 @@
 
 <script>
 import Status from '@/components/Status'
-const addr = "http://localhost:4010/v1/"
 
 export default {
   name: 'samples',
@@ -96,10 +98,10 @@ export default {
       }])
       vm.$store.commit('addStatus', {
         "id": 1,
-        "status": "created"
+        "status": "finished"
       })
     } else {
-      fetch(`${addr}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
+      fetch(`${process.env.ADDR}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
         return Promise.resolve(vm.$store.commit('addSamples', projects))
       }).then(() => fetch(`${addr}/status`)).then((response) => response.json()).then((result) => { // fetch status
         result.forEach((status) => {
