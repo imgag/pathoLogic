@@ -1,0 +1,321 @@
+---
+swagger: "2.0"
+info:
+  description: "Frontend for the pathoLogic pipeline"
+  version: "0.1.0"
+  title: "pathoLogic"
+  contact:
+    email: "caspar.gross@med.uni-tuebingen.de"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+basePath: "/v1"
+tags:
+- name: "sample"
+  description: "Sample information"
+- name: "status"
+  description: "Process status"
+- name: "result"
+  description: "Sample results"
+schemes:
+- "http"
+- "https"
+paths:
+  /status:
+    get:
+      tags:
+      - "status"
+      summary: "Get list of all sample statuses"
+      operationId: "status_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful"
+          schema:
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                status:
+                  $ref: "#/definitions/Status"
+      x-swagger-router-controller: "swagger_server.controllers.status_controller"
+  /status/{sampleID}:
+    get:
+      tags:
+      - "status"
+      summary: "Get status for one or more samples"
+      operationId: "status_sample_idget"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "sampleID"
+        in: "path"
+        description: "Comma seperated list of results to return"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+              status:
+                $ref: "#/definitions/Sample"
+        404:
+          description: "Sample(s) not found"
+      x-swagger-router-controller: "swagger_server.controllers.status_controller"
+  /samples:
+    get:
+      tags:
+      - "samples"
+      summary: "List all samples"
+      operationId: "samples_get"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "successful"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Sample"
+      x-swagger-router-controller: "swagger_server.controllers.samples_controller"
+    post:
+      tags:
+      - "samples"
+      summary: "Create new samples"
+      operationId: "samples_post"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/body"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            $ref: "#/definitions/Sample"
+      x-swagger-router-controller: "swagger_server.controllers.samples_controller"
+  /samples/{sampleID}/start:
+    put:
+      tags:
+      - "sample"
+      summary: "Starts one or multiple sample via ID"
+      operationId: "samples_sample_id_start_put"
+      parameters:
+      - name: "sampleID"
+        in: "path"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+              status:
+                $ref: "#/definitions/Status"
+      x-swagger-router-controller: "swagger_server.controllers.sample_controller"
+  /result/{sampleID}:
+    get:
+      tags:
+      - "sample"
+      summary: "Lists results for given sample"
+      operationId: "result_sample_idget"
+      parameters:
+      - name: "sampleID"
+        in: "path"
+        description: "Comma seperated list of results to return"
+        required: true
+        type: "array"
+        items:
+          type: "string"
+      responses:
+        200:
+          description: "successful"
+          schema:
+            type: "object"
+            properties:
+              id:
+                type: "string"
+              result:
+                $ref: "#/definitions/Result"
+      x-swagger-router-controller: "swagger_server.controllers.sample_controller"
+definitions:
+  Status:
+    type: "string"
+    enum:
+    - "created"
+    - "started"
+    - "finished"
+    - "error"
+  Result:
+    type: "object"
+    properties:
+      statistics_path:
+        type: "string"
+      zip_path:
+        type: "string"
+    example:
+      statistics_path: "statistics_path"
+      zip_path: "zip_path"
+  Config:
+    type: "object"
+    properties:
+      cpu:
+        type: "integer"
+        format: "int64"
+        description: "Number of threads per process"
+        minimum: 1
+        maximum: 40
+        default: 5
+      queue_size:
+        type: "integer"
+        format: "int64"
+        description: "Number of concurrent processes"
+        minimum: 1
+        maximum: 20
+        default: 4
+      min_contig_length:
+        type: "integer"
+        format: "int64"
+        description: "Length cutoff for contigs in final result"
+        minimum: 1
+        maximum: 1000000
+        default: 2000
+      target_shortread_cov:
+        type: "integer"
+        format: "int64"
+        description: "Short reads are subsampled to reach this target coverage"
+        minimum: 1
+        maximum: 200
+        default: 150
+      target_longread_cov:
+        type: "integer"
+        format: "int64"
+        description: "Long reads are subsampled to reach this target coverage"
+        minimum: 1
+        maximum: 200
+        default: 150
+      est_genome_size:
+        type: "integer"
+        format: "int64"
+        description: "Estimated approximate final genome size of assembled bacteria.\
+          \ Used for coverage calculations"
+        minimum: 1
+        maximum: 10000000
+        default: 5300000
+      mode:
+        type: "string"
+        description: "Different assembly methods"
+        enum:
+        - "all"
+        - "unicycler"
+        - "spades"
+        - "miniasm"
+        - "canu"
+        - "flye"
+        default: "unicycler"
+      seq_padding:
+        type: "integer"
+        format: "int64"
+        description: "Number of bases added at sequence ends to improve alignment\
+          \ quality in plasmid identification"
+        minimum: 1
+        maximum: 10000
+        default: 1000
+      cov_window:
+        type: "integer"
+        format: "int64"
+        description: "Window size for coverage calculation"
+        minimum: 20
+        maximum: 5000
+        default: 50
+  Sample:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      author_email:
+        type: "string"
+        format: "email"
+      created:
+        type: "string"
+        format: "date"
+      last_updated:
+        type: "string"
+        format: "date"
+      path_one:
+        type: "string"
+      path_two:
+        type: "string"
+    example:
+      last_updated: "2000-01-23"
+      path_one: "path_one"
+      created: "2000-01-23"
+      author_email: "author_email"
+      path_two: "path_two"
+      id: "id"
+  inline_response_200:
+    properties:
+      id:
+        type: "string"
+      status:
+        $ref: "#/definitions/Status"
+    example:
+      id: "id"
+      status: {}
+  inline_response_200_1:
+    properties:
+      id:
+        type: "string"
+      status:
+        $ref: "#/definitions/Sample"
+    example:
+      id: "id"
+      status:
+        last_updated: "2000-01-23"
+        path_one: "path_one"
+        created: "2000-01-23"
+        author_email: "author_email"
+        path_two: "path_two"
+        id: "id"
+  body:
+    type: "object"
+    properties:
+      config:
+        $ref: "#/definitions/Config"
+      samples:
+        type: "array"
+        items:
+          $ref: "#/definitions/Sample"
+  inline_response_200_2:
+    properties:
+      id:
+        type: "string"
+      result:
+        $ref: "#/definitions/Result"
+    example:
+      result:
+        statistics_path: "statistics_path"
+        zip_path: "zip_path"
+      id: "id"
+externalDocs:
+  description: "Find out more about pathoLogic"
+  url: "http://github.com/imgag/pathoLogic"
