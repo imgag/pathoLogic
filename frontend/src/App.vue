@@ -16,7 +16,7 @@
       dark
       fixed
       to="createSamples"
-      v-if="$route.name != 'createSamples'"
+      v-if="$route.name == 'samples'"
     >
       <v-icon>add</v-icon>
     </v-btn>

@@ -4,36 +4,42 @@
     align-top
   >
 
-  <v-flex
-    xs20
-    mr-2
+  <v-data-table
+    :headers="headers"
+    :items="$store.getters.samples"
   >
-  <v-autocomplete
-      v-model="filter_ids"
-      :multiple="true"
-      hint="Filter by sample id"
-      :items="$store.getters.sample_ids"
-      persistent-hint
-  />
-  </v-flex>
+    <template slot="items" slot-scope="props">
+      <td v-if="props.item.status === 'finished'">
+        <router-link :to="{ name: 'result', params: { id: props.item.id } }">{{ props.item.id }}</router-link>
+      </td>
+      <td v-else>{{ props.item.id }}</td>
+      <td>{{ props.item.author_email }}</td>
+      <td>{{ props.item.created }}</td>
+      <td>{{ props.item.last_updated }}</td>
+      <td><status :status="props.item.status"></status></td>
+      <td v-if="props.item.status === 'created'">
+        <v-checkbox @change="updateSelectedSample(props.item.id, $event)"/>
+      </td>
+      <td v-else/>
+    </template>
+    <template slot="footer">
+    <td colspan="3">
+      <v-autocomplete
+        v-model="filter_ids"
+        :multiple="true"
+        hint="Filter by sample id"
+        :items="$store.getters.sample_ids"
+        persistent-hint
+      />
+    </td>
+    <td colspan="1">
 
-  <v-flex xs12>
-    <v-data-table
-      :headers="headers"
-      :items="$store.getters.samples"
-    >
-      <template slot="items" slot-scope="props">
-        <td v-if="props.item.status === 'finished'">
-          <router-link :to="{ name: 'result', params: { id: props.item.id } }">{{ props.item.id }}</router-link>
-        </td>
-        <td v-else>{{ props.item.id }}</td>
-        <td>{{ props.item.author_email }}</td>
-        <td>{{ props.item.created }}</td>
-        <td>{{ props.item.last_updated }}</td>
-        <td><status :status="props.item.status"></status></td>
-      </template>
-    </v-data-table>
-  </v-flex>
+    </td>
+    <td colspan="1">
+      <v-btn :disabled="selected_samples.length < 1" @click="startSamples">Start sample(s)</v-btn>
+    </td>
+  </template>
+  </v-data-table>
   </v-layout>
 </template>
 
@@ -47,6 +53,7 @@ export default {
   },
   data () {
     return {
+      selected_samples: [],
       headers: [
         {
           text: 'Sample ID',
@@ -77,6 +84,12 @@ export default {
           align: 'left',
           sortable: true,
           value: 'status'
+        },
+        {
+          text: 'Selected',
+          align: 'left',
+          sortable: false,
+          value: 'selected'
         }
       ],
       filter_ids: []
@@ -85,6 +98,29 @@ export default {
   watch: {
     filter_ids () {
       this.$store.commit('updateFilterIDs', Object.values(this.filter_ids))
+    }
+  },
+  methods: {
+    updateSelectedSample (id, event) {
+      if (event) {
+        if (!this.selected_samples.includes(id)) this.selected_samples.push(id)
+      } else {
+        this.selected_samples = this.selected_samples.filter((s) => s !== id)
+      }
+    },
+    startSamples () {
+      let vm = this
+      let selected_samples = this.selected_samples.map((s) => s.id)
+
+      fetch(`${process.env.ADDR}/status/${selected_samples.join(',')}`, {
+        method: 'PUT'
+      }).then((result) => {
+        status = (result.status === 200) ? 'started' : 'error'
+
+        selected_samples.forEach((sample) => {
+          vm.$store.commit('addStatus', { "id": sample, "status": status })
+        })
+      }) // TODO: Handle error
     }
   },
   mounted () {
@@ -98,7 +134,7 @@ export default {
       }])
       vm.$store.commit('addStatus', {
         "id": 1,
-        "status": "finished"
+        "status": "created"
       })
     } else {
       fetch(`${process.env.ADDR}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
