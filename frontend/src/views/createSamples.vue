@@ -31,7 +31,7 @@
           ml-2
         >
           <v-slider
-            v-model="config.queueSize"
+            v-model="config.queue_size"
             min=1
             max=20
             hint="Number of concurrent processes"
@@ -146,7 +146,7 @@
           ml-2
         >
           <v-slider
-            v-model="config.covWindow"
+            v-model="config.cov_window"
             min=20
             max=5000
             hint="Window size for coverage calculation"
@@ -259,14 +259,14 @@ export default {
       author_email: "",
       config: {
         cpu: 5,
-        queueSize: 4,
+        queue__size: 4,
         min_contig_length: 2000,
         target_shortread_cov: 150,
         target_longread_cov: 150,
         est_genome_size: 5300000,
         mode: "unicycler",
         seq_padding: 1000,
-        covWindow: 50
+        cov_window: 50
       },
       samples: [
 
