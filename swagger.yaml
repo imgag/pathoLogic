@@ -212,7 +212,7 @@ definitions:
         description: "Long reads are subsampled to reach this target coverage"
         required: FALSE
         default: 150
-     est_genome_size:
+      est_genome_size:
          type: "integer"
          format: "int64"
          minimum: 1
@@ -269,3 +269,4 @@ definitions:
 externalDocs:
   description: "Find out more about pathoLogic"
   url: "http://github.com/imgag/pathoLogic"
+
