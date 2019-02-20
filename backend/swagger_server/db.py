@@ -9,7 +9,7 @@ def get_db():
         if g.db.exists():
             g.db.open()
         else:
-            g.db.create('id', 'author_email', 'created', 'last_updated', 'path_one', 'path_two', 'status', 'result')
+            g.db.create('id', 'author_email', 'created', 'last_updated', 'status', 'result')
 
     return g.db
 
