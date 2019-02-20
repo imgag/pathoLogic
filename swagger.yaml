@@ -105,7 +105,9 @@ paths:
         200:
           description: "successful"
           schema:
-            $ref: "#/definitions/Sample"
+            type: "array"
+            items:
+              $ref: "#/definitions/Sample"
   /samples/{sampleID}/start:
     put:
       tags:
