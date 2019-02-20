@@ -1,6 +1,7 @@
 import connexion
 import six
 
+from flask import g
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server import util
@@ -16,7 +17,8 @@ def result_sample_idget(sampleID):  # noqa: E501
 
     :rtype: InlineResponse2002
     """
-    return 'do some magic!'
+    sampleIDs = sampleID.split(',')
+    return [{'id': sample.id, 'result': sample['result']} for sample in g.db if sample['id'] in sampleIDs]
 
 
 def samples_sample_id_start_put(sampleID):  # noqa: E501
@@ -29,4 +31,6 @@ def samples_sample_id_start_put(sampleID):  # noqa: E501
 
     :rtype: InlineResponse200
     """
+    sampleIDs = sampleID.split(',')
+    # TODO Start nextflow
     return 'do some magic!'
