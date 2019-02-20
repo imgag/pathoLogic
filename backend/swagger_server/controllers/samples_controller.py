@@ -9,6 +9,7 @@ from datetime import datetime
 from flask import g
 from swagger_server.models.body import Body  # noqa: E501
 from swagger_server.models.sample import Sample  # noqa: E501
+from swagger_server import db
 from swagger_server import util
 
 def format_sample(obj):
@@ -30,8 +31,8 @@ def samples_get():  # noqa: E501
 
     :rtype: List[Sample]
     """
-    return [format_sample(sample) for sample in g.db]
-
+#   return [format_sample(sample) for sample in g.db]
+    return format_sample(db['samples'])
 
 def samples_post(body=None):  # noqa: E501
     """Create new samples
@@ -43,12 +44,16 @@ def samples_post(body=None):  # noqa: E501
 
     :rtype: Sample
     """
+    # Create Body
     if connexion.request.is_json:
         body = Body.from_dict(connexion.request.get_json())  # noqa: E501
-    samplepath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()),'samples' )
+
     # Create samplepath
+    samplepath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()),'samples' )
     if not os.path.isdir(samplepath):
         os.mkdir(samplepath)
+
+    # Save config and read files for each sample in new folder
     for s in body.samples:
         conf = body.config
         os.mkdir(os.path.join(samplepath, s.id))
@@ -56,9 +61,14 @@ def samples_post(body=None):  # noqa: E501
             json.dump(conf.to_dict(), outfile)
         with open(os.path.join(samplepath, s.id, "read_locations.tsv"), 'w') as outfile:
             outfile.write(s.id + '\t' + s.path_lr + '\t'  +
-                          s.path_sr1 + '\t' +  s.path_lr + '\n') 
-     #  db = db.get_db()
-     #  db.insert(id = s.id, author_email = s.author_email, created =
-     #               str(datetime.utcnow()), last_updated =
-     #               str(datetime.utcnow()), status = "created")
+                          s.path_sr1 + '\t' +  s.path_lr + '\n')
+
+    # Store informations in dict db
+    db['sample']= {
+        'id':s.id,
+        'author_email':s.author_email,
+        'created':str(datetime.utcnow()),
+        'last_updated':str(datetime.utcnow()),
+        'status':"created"
+    }
     return body.samples
