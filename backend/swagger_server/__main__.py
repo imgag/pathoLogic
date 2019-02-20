@@ -3,6 +3,7 @@
 import os
 import connexion
 
+from flask import g
 from swagger_server import encoder
 from .db import get_db, close_db
 
@@ -12,6 +13,11 @@ def main():
     app.add_api('swagger.yaml', arguments={'title': 'pathoLogic'})
     app.run(port=os.getenv('HTTP_PORT', 8080))
     app.app.teardown_appcontext(close_db)
+
+    @app.app.route('/v1/nextflow')
+    def nextflow():
+        # TODO: Implement update from nextflow
+        return 'Hello, World!'
 
     with app.app.app_context():
         get_db()
