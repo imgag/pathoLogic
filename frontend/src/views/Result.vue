@@ -25,7 +25,7 @@ export default {
     },
     mounted () {
         let vm = this
-        fetch(`${process.env.ADDR}/result/${vm.$route.params.id}`)
+        fetch(`${vm.$basePath}/result/${vm.$route.params.id}`)
             .then((result) => Promise.resolve(result.json()))
             .then((content) => {
                 vm.statistics_path = content.statistics_path

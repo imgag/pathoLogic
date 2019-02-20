@@ -112,10 +112,10 @@ export default {
       let vm = this
       let selected_samples = this.selected_samples.map((s) => s.id)
 
-      fetch(`${process.env.ADDR}/status/${selected_samples.join(',')}`, {
+      fetch(`${vm.$basePath}/status/${selected_samples.join(',')}`, {
         method: 'PUT'
       }).then((result) => {
-        status = (result.status === 200) ? 'started' : 'error'
+        let status = (result.status === 200) ? 'started' : 'error'
 
         selected_samples.forEach((sample) => {
           vm.$store.commit('addStatus', { "id": sample, "status": status })
@@ -137,9 +137,9 @@ export default {
         "status": "created"
       })
     } else {
-      fetch(`${process.env.ADDR}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
+      fetch(`${vm.$basePath}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
         return Promise.resolve(vm.$store.commit('addSamples', projects))
-      }).then(() => fetch(`${addr}/status`)).then((response) => response.json()).then((result) => { // fetch status
+      }).then(() => fetch(`${vm.$basePath}/status`)).then((response) => response.json()).then((result) => { // fetch status
         result.forEach((status) => {
           vm.$store.commit('addStatus', status)
         })

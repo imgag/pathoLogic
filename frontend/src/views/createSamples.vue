@@ -299,10 +299,10 @@ export default {
         }
       })
 
-      fetch(`${proccess.env.ADDR}/projects`, {
+      fetch(`${vm.$basePath}/projects`, {
         method: 'POST',
         body: JSON.stringify({
-          config: config,
+          config: vm.config,
           samples: samples
         })
       }).then((response) => { // TODO: Add visual feedback
