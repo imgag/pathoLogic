@@ -2,7 +2,7 @@
 
 import os
 import connexion
-
+import json
 from flask import g
 from flask import request
 from swagger_server import encoder
@@ -13,18 +13,17 @@ def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'pathoLogic'})
-    app.run(port=os.getenv('HTTP_PORT', 8080))
-    #app.app.teardown_appcontext(close_db)
 
     #Temporary fix: use dictionary as db
     @app.app.route('/v1/nextflow/<runid>', methods=['POST'])
     def nextflow(runid):
-        # TODO: Implement update from nextflow
-        print(request)
-        return 'Hello, World!'
+        req_data = request.get_json()
+        print(req_data)
+        db['status'][runid] = req_data
+        print(json.dumps(db['status'][runid]))
 
-#    with app.app.app_context():
-#        get_db()
+        return 'NF Request received'
+    app.run(port=os.getenv('HTTP_PORT', 8080))
 
 if __name__ == '__main__':
     main()

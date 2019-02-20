@@ -46,14 +46,14 @@ def samples_sample_id_start_put(sampleID):  # noqa: E501
 
     # Copy input and config files to run folder         
     os.system("cat " + " ".join([os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
-            'sample', sID) for sID in sampleID]) +
+            'samples', sID, 'read_locations.tsv') for sID in sampleID]) +
             " >> " + os.path.join(runpath, "read_locations.tsv"))
     os.system("cp " + os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
-             sampleID[0], "nf_config.json") + " " + os.path.join(runpath,
-                                                                 "nf_config.json"))
+            'samples', sampleID[0], "nf_config.json") + " " + os.path.join(runpath,
+            "nf_config.json"))
     os.system("cd " + runpath + "&& nextflow run hybridassembly --input \
               read_locations.tsv -params-file nf_config.json -with-weblog \
-              localhost:8080/v1/nextflow/" + runid)
+              http://localhost:8080/v1/nextflow/" + runid)
 
     # Update status of samples
     #{status:'started' for k,v in db.items()}

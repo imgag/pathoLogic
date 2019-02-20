@@ -2,3 +2,4 @@
 db = {}
 db['samples'] = {}
 db['runs'] = {}
+db['status'] = {}
