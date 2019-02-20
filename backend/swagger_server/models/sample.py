@@ -15,7 +15,7 @@ class Sample(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id: str=None, author_email: str=None, created: date=None, last_updated: date=None, path_one: str=None, path_two: str=None):  # noqa: E501
+    def __init__(self, id: str=None, author_email: str=None, created: date=None, last_updated: date=None, path_lr: str=None, path_sr1: str=None, path_sr2: str=None):  # noqa: E501
         """Sample - a model defined in Swagger
 
         :param id: The id of this Sample.  # noqa: E501
@@ -26,18 +26,21 @@ class Sample(Model):
         :type created: date
         :param last_updated: The last_updated of this Sample.  # noqa: E501
         :type last_updated: date
-        :param path_one: The path_one of this Sample.  # noqa: E501
-        :type path_one: str
-        :param path_two: The path_two of this Sample.  # noqa: E501
-        :type path_two: str
+        :param path_lr: The path_lr of this Sample.  # noqa: E501
+        :type path_lr: str
+        :param path_sr1: The path_sr1 of this Sample.  # noqa: E501
+        :type path_sr1: str
+        :param path_sr2: The path_sr2 of this Sample.  # noqa: E501
+        :type path_sr2: str
         """
         self.swagger_types = {
             'id': str,
             'author_email': str,
             'created': date,
             'last_updated': date,
-            'path_one': str,
-            'path_two': str
+            'path_lr': str,
+            'path_sr1': str,
+            'path_sr2': str
         }
 
         self.attribute_map = {
@@ -45,16 +48,18 @@ class Sample(Model):
             'author_email': 'author_email',
             'created': 'created',
             'last_updated': 'last_updated',
-            'path_one': 'path_one',
-            'path_two': 'path_two'
+            'path_lr': 'path_lr',
+            'path_sr1': 'path_sr1',
+            'path_sr2': 'path_sr2'
         }
 
         self._id = id
         self._author_email = author_email
         self._created = created
         self._last_updated = last_updated
-        self._path_one = path_one
-        self._path_two = path_two
+        self._path_lr = path_lr
+        self._path_sr1 = path_sr1
+        self._path_sr2 = path_sr2
 
     @classmethod
     def from_dict(cls, dikt) -> 'Sample':
@@ -152,43 +157,64 @@ class Sample(Model):
         self._last_updated = last_updated
 
     @property
-    def path_one(self) -> str:
-        """Gets the path_one of this Sample.
+    def path_lr(self) -> str:
+        """Gets the path_lr of this Sample.
 
 
-        :return: The path_one of this Sample.
+        :return: The path_lr of this Sample.
         :rtype: str
         """
-        return self._path_one
+        return self._path_lr
 
-    @path_one.setter
-    def path_one(self, path_one: str):
-        """Sets the path_one of this Sample.
+    @path_lr.setter
+    def path_lr(self, path_lr: str):
+        """Sets the path_lr of this Sample.
 
 
-        :param path_one: The path_one of this Sample.
-        :type path_one: str
+        :param path_lr: The path_lr of this Sample.
+        :type path_lr: str
         """
 
-        self._path_one = path_one
+        self._path_lr = path_lr
 
     @property
-    def path_two(self) -> str:
-        """Gets the path_two of this Sample.
+    def path_sr1(self) -> str:
+        """Gets the path_sr1 of this Sample.
 
 
-        :return: The path_two of this Sample.
+        :return: The path_sr1 of this Sample.
         :rtype: str
         """
-        return self._path_two
+        return self._path_sr1
 
-    @path_two.setter
-    def path_two(self, path_two: str):
-        """Sets the path_two of this Sample.
+    @path_sr1.setter
+    def path_sr1(self, path_sr1: str):
+        """Sets the path_sr1 of this Sample.
 
 
-        :param path_two: The path_two of this Sample.
-        :type path_two: str
+        :param path_sr1: The path_sr1 of this Sample.
+        :type path_sr1: str
         """
 
-        self._path_two = path_two
+        self._path_sr1 = path_sr1
+
+    @property
+    def path_sr2(self) -> str:
+        """Gets the path_sr2 of this Sample.
+
+
+        :return: The path_sr2 of this Sample.
+        :rtype: str
+        """
+        return self._path_sr2
+
+    @path_sr2.setter
+    def path_sr2(self, path_sr2: str):
+        """Sets the path_sr2 of this Sample.
+
+
+        :param path_sr2: The path_sr2 of this Sample.
+        :type path_sr2: str
+        """
+
+        self._path_sr2 = path_sr2

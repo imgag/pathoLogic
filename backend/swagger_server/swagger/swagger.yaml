@@ -261,16 +261,19 @@ definitions:
       last_updated:
         type: "string"
         format: "date"
-      path_one:
+      path_lr:
         type: "string"
-      path_two:
+      path_sr1:
+        type: "string"
+      path_sr2:
         type: "string"
     example:
+      path_sr1: "path_sr1"
+      path_sr2: "path_sr2"
       last_updated: "2000-01-23"
-      path_one: "path_one"
+      path_lr: "path_lr"
       created: "2000-01-23"
       author_email: "author_email"
-      path_two: "path_two"
       id: "id"
   inline_response_200:
     properties:
@@ -290,11 +293,12 @@ definitions:
     example:
       id: "id"
       status:
+        path_sr1: "path_sr1"
+        path_sr2: "path_sr2"
         last_updated: "2000-01-23"
-        path_one: "path_one"
+        path_lr: "path_lr"
         created: "2000-01-23"
         author_email: "author_email"
-        path_two: "path_two"
         id: "id"
   body:
     type: "object"

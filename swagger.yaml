@@ -262,9 +262,11 @@ definitions:
       last_updated:
         type: "string"
         format: "date"
-      path_one:
+      path_lr:
         type: "string"
-      path_two:
+      path_sr1:
+        type: "string"
+      path_sr2:
         type: "string"
 externalDocs:
   description: "Find out more about pathoLogic"
