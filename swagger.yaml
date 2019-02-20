@@ -153,7 +153,13 @@ paths:
                 type: "string"
               result:
                 $ref: "#/definitions/Result"
-
+  /nextflow:
+    post:
+      tags:
+      - "nextflow"
+      responses:
+        200:
+          description: "successful"
 definitions:
   Status:
     type: "string"
