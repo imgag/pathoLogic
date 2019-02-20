@@ -203,10 +203,13 @@
       <template slot="items" slot-scope="props">
         <td> <editable :content="props.item.id"/></td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_one" @change="props.item.path_one = $event.srcElement.value"/>
+          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value"/>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_two" @change="props.item.path_two = $event.srcElement.value"/>
+          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value"/>
+        </td>
+        <td class="text-xs-left">
+          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value"/>
         </td>
       </template>
       </v-data-table>
@@ -232,14 +235,19 @@ export default {
           value: 'id'
         },
         {
-          text: 'Path A',
+          text: 'Path long read',
           sortable: false,
-          value: 'path_one'
+          value: 'path_lr'
         },
         {
-          text: 'Path B',
+          text: 'Path short read 1',
           sortable: false,
-          value: 'path_two'
+          value: 'path_sr1'
+        },
+        {
+          text: 'Path short read 2',
+          sortable: false,
+          value: 'path_sr2'
         }
       ],
       emailRules: [
@@ -276,7 +284,7 @@ export default {
   computed: {
     valid_samples () {
       return this.samples.every((s) => {
-        return s.id !== '' && s.path_one !== '' && s.path_two !== ''
+        return s.id !== '' && s.path_lr !== ''
       }) && this.samples.length
     }
   },
@@ -284,8 +292,9 @@ export default {
     addSample () {
       this.samples.push({
         id: 'sample',
-        path_one: '',
-        path_two: ''    
+        path_lr: '',
+        path_sr1: '',
+        path_sr2: ''
       })
     },
     saveSamples () {
