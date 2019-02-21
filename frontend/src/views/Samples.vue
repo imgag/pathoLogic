@@ -110,15 +110,14 @@ export default {
     },
     startSamples () {
       let vm = this
-      let selected_samples = this.selected_samples.map((s) => s.id)
 
-      fetch(`${vm.$basePath}/samples/${selected_samples.join(',')}/start`, {
+      fetch(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
         method: 'PUT'
       }).then((result) => {
         let status = (result.status === 200) ? 'started' : 'error'
 
-        selected_samples.forEach((sample) => {
-          vm.$store.commit('addStatus', { "id": sample, "status": status })
+        vm.selected_samples.forEach((sample) => {
+          vm.$store.commit('addStatus', { "id": sample.id, "status": status })
         })
       }) // TODO: Handle error
     }
