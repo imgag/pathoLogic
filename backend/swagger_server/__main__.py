@@ -3,8 +3,7 @@
 import os
 import connexion
 import json
-from flask import g
-from flask import request
+from flask import request, send_from_directory, g
 from swagger_server import encoder
 from swagger_server import db
 #from .db import get_db, close_db
@@ -13,6 +12,13 @@ def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
     app.app.json_encoder = encoder.JSONEncoder
     app.add_api('swagger.yaml', arguments={'title': 'pathoLogic'})
+
+    # Serve results under /v1/result/PATH
+    app.app.config['STATIC_URL_PATH'] = os.path.abspath(os.getenv('BASE_DIR', os.getcwd()))
+
+    @app.app.route('/v1/result/<path:path>')
+    def send_result(path):
+        return send_from_directory('runs', path)
 
     #Temporary fix: use dictionary as db
 
