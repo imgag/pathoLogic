@@ -3,7 +3,7 @@ import six
 import uuid
 import os
 
-from swagger_server import db
+from swagger_server.db import get_db
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
 from swagger_server import util
@@ -19,9 +19,8 @@ def result_sample_idget(sampleID):  # noqa: E501
 
     :rtype: InlineResponse2002
     """
-    #sampleIDs = sampleID.split(',')
-    print(sampleID)
-    return sampleID
+    db = get_db()
+    return [db['samples'][sample].get('result', {}) for sample in db['samples'].keys() if sample in sampleID]
 
 
 def samples_sample_id_start_put(sampleID):  # noqa: E501
@@ -61,9 +60,15 @@ def samples_sample_id_start_put(sampleID):  # noqa: E501
               -params-file nf_config.json -with-weblog \
               http://localhost:8080/v1/nf_plasmident/" + runid)
 
-    # Add results to a file archive
-
     # Store download link for results in db
+    db = get_db()
+    for sID in sampleID:
+        db['samples'][sID]['status'] = 'started'
+        #db['samples'][sID]['result'] = {
+        #    
+        #} # TODO: Add result
+
+    db['runs'][runid] = sampleID
 
     # Update status of samples
-    return 'do some magic!'
+    return 'successful'

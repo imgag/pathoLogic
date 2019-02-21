@@ -5,10 +5,10 @@ import json
 
 from datetime import datetime
 
-from flask import g
+from flask import current_app, g
 from swagger_server.models.body import Body  # noqa: E501
 from swagger_server.models.sample import Sample  # noqa: E501
-from swagger_server import db
+from swagger_server.db import get_db
 from swagger_server import util
 
 def format_sample(obj):
@@ -16,10 +16,7 @@ def format_sample(obj):
         'id': obj['id'],
         'author_email': obj['author_email'],
         'created': obj['created'],
-        'last_updated': obj['last_updated'],
-        'path_lr': obj['path_lr'],
-        'path_sr1': obj['path_sr1'],
-        'path_sr2': obj['path_sr2'],
+        'last_updated': obj['last_updated']
     }
 
 def samples_get():  # noqa: E501
@@ -30,7 +27,9 @@ def samples_get():  # noqa: E501
 
     :rtype: List[Sample]
     """
-    return [format_sample(sample) for sample in db['samples']]
+
+    db = get_db()
+    return [format_sample(db['samples'][sample]) for sample in db['samples'].keys()]
 
 def samples_post(body=None):  # noqa: E501
     """Create new samples
@@ -62,11 +61,13 @@ def samples_post(body=None):  # noqa: E501
                           s.path_sr1 + '\t' +  s.path_lr + '\n')
 
     # Store informations in dict db
-    db['sample']= {
+    db = get_db()
+    db['samples'][s.id] = {
         'id':s.id,
         'author_email':s.author_email,
         'created':str(datetime.utcnow()),
         'last_updated':str(datetime.utcnow()),
         'status':"created"
     }
+    
     return body.samples

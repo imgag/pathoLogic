@@ -4,7 +4,7 @@ import six
 from flask import g
 from swagger_server.models.inline_response2001 import InlineResponse2001  # noqa: E501
 from swagger_server import util
-from swagger_server import db
+from swagger_server.db import get_db
 
 def status_get():  # noqa: E501
     """Get list of all sample statuses
@@ -14,7 +14,8 @@ def status_get():  # noqa: E501
 
     :rtype: List[object]
     """
-    return [{'id': sample['id'], 'status': sample['status']} for sample in db]
+    db = get_db()
+    return [{'id': sample, 'status': db['samples'][sample]['status']} for sample in db['samples'].keys()]
 
 
 def status_sample_idget(sampleID):  # noqa: E501
@@ -27,5 +28,6 @@ def status_sample_idget(sampleID):  # noqa: E501
 
     :rtype: InlineResponse2001
     """
-    statusIDs = sampleID.split(',')
-    return [{'id': sample['id'], 'status': sample.status} for sample in db if sample.id in statusIDs]
+    db = get_db()
+
+    return [{'id': sample, 'status': db['samples'][sample]['status']} for sample in db['samples'].keys() if sample in sampleID]
