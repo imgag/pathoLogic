@@ -2,7 +2,7 @@ import atexit
 import os
 import pickle
 
-picklePath = os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'pathoLogic.pickle')
+picklePath = os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'pathoLogic.db')
 # Global dict serves as database
 if os.path.isfile(picklePath):
     db = pickle.load(open(picklePath, 'rb'))
@@ -13,6 +13,6 @@ else:
     db['status'] = {}
 
 def goodbye(db):
-    pickle.dump(db, open(os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'pathoLogic.pickle'), 'wb'))
+    pickle.dump(db, open(os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'pathoLogic.db'), 'wb'))
 
 atexit.register(goodbye, db)
