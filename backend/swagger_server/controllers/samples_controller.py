@@ -2,7 +2,6 @@ import connexion
 import six
 import os
 import json
-#import ../.db.py as db
 
 from datetime import datetime
 
@@ -31,8 +30,7 @@ def samples_get():  # noqa: E501
 
     :rtype: List[Sample]
     """
-#   return [format_sample(sample) for sample in g.db]
-    return format_sample(db['samples'])
+    return [format_sample(sample) for sample in db['samples']]
 
 def samples_post(body=None):  # noqa: E501
     """Create new samples
