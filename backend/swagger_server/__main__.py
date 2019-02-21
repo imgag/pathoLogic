@@ -18,6 +18,7 @@ def main():
 
     # Serve results under /v1/result/PATH
     app.app.config['STATIC_URL_PATH'] = os.path.abspath(os.getenv('BASE_DIR', os.getcwd()))
+    CORS(app.app) # enable CORS everywhere
 
     # Use dictionary as DB
     with app.app.app_context():
@@ -42,6 +43,9 @@ def main():
         db = get_db()
         db['status_assembly'][runid] = req_data
         print(json.dumps(db['status'][runid]))
+        if req_data['event'] == 'process_completed':
+            for sID in db['runs'][runid]:
+                db['samples'][sID]['status'] = 'finished'
         return 'NF Request received'
 
     # Create route for nextflow weblog (plasmident)
@@ -52,9 +56,11 @@ def main():
         db = get_db()
         db['status_plasmident'][runid] = req_data
         print(json.dumps(db['status'][runid]))
+        if req_data['event'] == 'process_completed':
+            for sID in db['runs'][runid]:
+                db['samples'][sID]['status'] = 'finished'
         return 'NF Request received'
 
-    CORS(app.app) # enable CORS everywhere
     app.run(port=os.getenv('HTTP_PORT', 8080))
 
 if __name__ == '__main__':
