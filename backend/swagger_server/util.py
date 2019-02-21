@@ -23,10 +23,13 @@ def _deserialize(data, klass):
         return deserialize_date(data)
     elif klass == datetime.datetime:
         return deserialize_datetime(data)
-    elif type(klass) == typing.GenericMeta:
-        if klass.__extra__ == list:
+    # this has been changed because of
+    # https://github.com/zalando/connexion/issues/739#issuecomment-437398835
+    # https://stackoverflow.com/a/50080269/10976572
+    elif hasattr(klass, '__origin__'):
+        if klass.__origin__ == list:
             return _deserialize_list(data, klass.__args__[0])
-        if klass.__extra__ == dict:
+        if klass.__origin__ == dict:
             return _deserialize_dict(data, klass.__args__[1])
     else:
         return deserialize_model(data, klass)
