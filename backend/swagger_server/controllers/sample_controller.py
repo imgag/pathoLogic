@@ -3,7 +3,6 @@ import six
 import uuid
 import os
 
-#from flask import g
 from swagger_server import db
 from swagger_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from swagger_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
@@ -51,10 +50,20 @@ def samples_sample_id_start_put(sampleID):  # noqa: E501
     os.system("cp " + os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
             'samples', sampleID[0], "nf_config.json") + " " + os.path.join(runpath,
             "nf_config.json"))
-    os.system("cd " + runpath + "&& nextflow run hybridassembly --input \
-              read_locations.tsv -params-file nf_config.json -with-weblog \
-              http://localhost:8080/v1/nextflow/" + runid)
+
+    # Run Hybrid assembly
+    os.system("cd " + runpath + "&& nextflow run hybridassembly -profile app \
+              -params-file nf_config.json -with-weblog \
+              http://localhost:8080/v1/nf_assembly/" + runid)
+
+    # Run plasmident
+    os.system("cd " + runpath + "&& nextflow run plasmident -profile app \
+              -params-file nf_config.json -with-weblog \
+              http://localhost:8080/v1/nf_plasmident/" + runid)
+
+    # Add results to a file archive
+
+    # Store download link for results in db
 
     # Update status of samples
-    #{status:'started' for k,v in db.items()}
     return 'do some magic!'
