@@ -112,7 +112,7 @@ export default {
       let vm = this
       let selected_samples = this.selected_samples.map((s) => s.id)
 
-      fetch(`${vm.$basePath}/status/${selected_samples.join(',')}`, {
+      fetch(`${vm.$basePath}/samples/${selected_samples.join(',')}/start`, {
         method: 'PUT'
       }).then((result) => {
         let status = (result.status === 200) ? 'started' : 'error'

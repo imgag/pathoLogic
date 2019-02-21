@@ -4,9 +4,9 @@ import os
 import connexion
 import json
 from flask import request, send_from_directory, g
+from flask_cors import CORS
 from swagger_server import encoder
 from swagger_server import db
-#from .db import get_db, close_db
 
 def main():
     app = connexion.App(__name__, specification_dir='./swagger/')
@@ -40,6 +40,7 @@ def main():
         print(json.dumps(db['status'][runid]))
         return 'NF Request received'
 
+    CORS(app.app) # enable CORS everywhere
     app.run(port=os.getenv('HTTP_PORT', 8080))
 
 if __name__ == '__main__':

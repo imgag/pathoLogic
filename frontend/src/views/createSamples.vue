@@ -192,7 +192,7 @@
           xs-1
           mr-1
         >
-          <v-btn right :disabled="!valid_config && !valid_samples" type="submit">Save samples</v-btn>
+          <v-btn right :disabled="!valid_config && !valid_samples" @click="saveSamples">Save samples</v-btn>
         </v-flex>
       </v-layout>
 
@@ -283,9 +283,7 @@ export default {
   },
   computed: {
     valid_samples () {
-      return this.samples.every((s) => {
-        return s.id !== '' && s.path_lr !== ''
-      }) && this.samples.length
+      return this.samples.length && this.samples.every((sample) => sample.id !== "sample" && sample.id.length && sample.path_lr.length)
     }
   },
   methods: {
@@ -308,18 +306,21 @@ export default {
         }
       })
 
-      fetch(`${vm.$basePath}/projects`, {
+      fetch(`${vm.$basePath}/samples`, {
         method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           config: vm.config,
           samples: samples
         })
       }).then((response) => { // TODO: Add visual feedback
-        if (response.status == 200) {
+        if (response.status === 200) {
           vm.$store.commit('addSamples', samples.map((sample) => sample.status = 'created'))
-          vm.$router.push('samples')
         }
-      }).catch(() => vm.$router.push('samples'))
+        vm.$router.push({name: 'samples'})
+      }).catch(() => vm.$router.push({name: 'samples'}))
     }
   }
 }

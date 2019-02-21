@@ -6,7 +6,7 @@ import 'material-icons/css/material-icons.min.css'
 import router from './router'
 
 Vue.config.productionTip = false
-Vue.prototype.$basePath = 'http://localhost:8080/v1/'
+Vue.prototype.$basePath = 'http://localhost:8080/v1'
 
 new Vue({
   store,
