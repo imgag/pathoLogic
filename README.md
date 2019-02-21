@@ -1,6 +1,7 @@
-metabiom
+pathoLogic
 --------
 
+Hybrid assembly and plasmid identification pipeline.
 This repo contains all the files for `pathoLogic`.
 
 The [swagger definition](http://swagger.io/) can be found [here as well](./swagger.yaml).
