@@ -173,6 +173,7 @@ definitions:
         type: "string"
   Config:
     type: "object"
+    required: ["mode"]
     properties:
       cpu:
         type: "integer"
@@ -180,7 +181,6 @@ definitions:
         minimum: 1
         maximum: 40
         description: "Number of threads per process"
-        required: FALSE
         default: 5
       queue_size:
         type: "integer"
@@ -188,7 +188,6 @@ definitions:
         minimum: 1
         maximum: 20
         description: "Number of concurrent processes"
-        required: FALSE
         default: 4
       min_contig_length:
         type: "integer"
@@ -196,7 +195,6 @@ definitions:
         minimum: 1
         maximum: 1000000
         description: "Length cutoff for contigs in final result" 
-        required: FALSE
         default: 2000
       target_shortread_cov:
         type: "integer"
@@ -204,7 +202,6 @@ definitions:
         minimum: 1
         maximum: 200
         description: "Short reads are subsampled to reach this target coverage"
-        required: FALSE
         default: 150
       target_longread_cov:
         type: "integer"
@@ -212,7 +209,6 @@ definitions:
         minimum: 1
         maximum: 200
         description: "Long reads are subsampled to reach this target coverage"
-        required: FALSE
         default: 150
       est_genome_size:
          type: "integer"
@@ -220,7 +216,6 @@ definitions:
          minimum: 1
          maximum: 10000000
          description: "Estimated approximate final genome size of assembled bacteria. Used for coverage calculations"
-         required: FALSE
          default: 5300000
       mode:
          type: "string"
@@ -232,7 +227,6 @@ definitions:
            - "canu"
            - "flye"
          description: "Different assembly methods"
-         required: TRUE
          default: "unicycler"
       seq_padding:
           type: "integer"
@@ -240,7 +234,6 @@ definitions:
           minimum: 1
           maximum: 10000
           description: "Number of bases added at sequence ends to improve alignment quality in plasmid identification"
-          required: FALSE
           default: 1000
       cov_window:
           type: "integer"
@@ -248,7 +241,6 @@ definitions:
           minimum: 20
           maximum: 5000
           description: "Window size for coverage calculation" 
-          required: FALSE
           default: 50
   Sample:
     type: "object"

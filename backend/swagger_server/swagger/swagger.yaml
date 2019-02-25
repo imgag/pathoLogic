@@ -99,14 +99,16 @@ paths:
       parameters:
       - in: "body"
         name: "body"
-        required: false
+        required: true
         schema:
           $ref: "#/definitions/body"
       responses:
         200:
           description: "successful"
           schema:
-            $ref: "#/definitions/Sample"
+            type: "array"
+            items:
+              $ref: "#/definitions/Sample"
       x-swagger-router-controller: "swagger_server.controllers.samples_controller"
   /samples/{sampleID}/start:
     put:
@@ -177,6 +179,7 @@ definitions:
       zip_path: "zip_path"
   Config:
     type: "object"
+    required: ["mode"]
     properties:
       cpu:
         type: "integer"
@@ -323,3 +326,4 @@ definitions:
 externalDocs:
   description: "Find out more about pathoLogic"
   url: "http://github.com/imgag/pathoLogic"
+
