@@ -124,7 +124,9 @@ export default {
   },
   mounted () {
     let vm = this
-    if (window.webpackHotUpdate) {
+//  if (window.webpackHotUpdate) {
+// eslint-disable-next-line
+    if (false) {
       vm.$store.commit('addSamples', [{
         "id": 1,
         "author_email": "lennard.berger@student.uni-tuebingen.de",

@@ -2,174 +2,17 @@
 
   <v-layout
     justify-center 
-    align-top
+    align-start
   >
     <v-form v-model="valid_config">
-      <v-flex
-        xs12
-      >
-        <h2>Config</h2>    
+      <v-flex>
+      <h2>Configuration</h2>    
       </v-flex>
-      <v-layout>
-        <v-flex
-          xs3
-          mr-2
-        >      
-          <v-slider
-            v-model="config.cpu"
-            min=1
-            max=40
-            hint="Number of threads per process"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-
-        <v-flex
-          xs3
-          mr-2
-          ml-2
-        >
-          <v-slider
-            v-model="config.queue_size"
-            min=1
-            max=20
-            hint="Number of concurrent processes"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-
-        <v-flex
-          xs4
-          ml-2
-          mr-2
-        >
-          <v-select
-            v-model="config.mode"
-            :items="modes"
-            hint="Different assembly methods"
-            :persistent-hint="true"
-            solo
-          />
-        </v-flex>
-
-        <v-flex
-          xs2
-          ml-2
-        >
-          <v-switch
-            v-model="advanced_options"
-            hint="Advanced options"
-            :persistent-hint="true"
-          >
-          </v-switch>
-        </v-flex>
-      </v-layout>
-
-      <v-layout v-if="advanced_options">
-        <v-flex
-          xs4
-          mr-2
-        >
-          <v-slider
-            v-model="config.min_contig_length"
-            min=1
-            max=1000000
-            hint="Length cutoff for contigs in final result"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-
-        <v-flex
-          xs4
-          mr-2
-          ml-2
-        >
-          <v-slider
-            v-model="target_shortread_cov"
-            min=1
-            max=200
-            hint="Short reads are subsampled to reach this target coverage"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-        <v-flex
-          xs4
-          ml-2
-        >
-          <v-slider
-            v-model="config.target_longread_cov"
-            min=1
-            max=200
-            hint="Long reads are subsampled to reach this target coverage"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-      </v-layout>
-
-      <v-layout v-if="advanced_options">
-        <v-flex
-          xs4
-          mr-2
-        >
-          <v-slider
-            v-model="config.est_genome_size"
-            min=1
-            max=10000000
-            hint="Estimated approximate final genome size of assembled bacteria. Used for coverage calculations"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-
-        <v-flex
-          xs4
-          mr-2
-          ml-2
-        >
-          <v-slider
-            v-model="config.seq_padding"
-            min=1
-            max=10000
-            hint="Number of bases added at sequence ends to improve alignment quality in plasmid identification"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-
-        <v-flex
-          xs4
-          ml-2
-        >
-          <v-slider
-            v-model="config.cov_window"
-            min=20
-            max=5000
-            hint="Window size for coverage calculation"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-      </v-layout>
-
-      <v-layout>
-        <v-flex
-          xs12
-          mt-2
-          mb-2
-        >
-          <h2>Samples</h2>    
-        </v-flex>
-      </v-layout>
-
-      <v-layout>
+      <v-layout 
+          ma-3
+          column>
         <v-flex
           xs-10
-          mr-2
         >
           <v-text-field
             v-model="author_email"
@@ -181,6 +24,235 @@
             solo
           ></v-text-field>
         </v-flex>
+
+        <v-flex
+          xs2
+        >
+          <v-select
+            v-model="config.mode"
+            :items="modes"
+            hint="Assembly methods"
+            :persistent-hint="true"
+            solo
+          />
+        </v-flex>
+
+        <v-flex
+          xs2
+        >
+          <v-switch
+            v-model="advanced_options"
+            hint="show advanced options"
+            :persistent-hint="true"
+          >
+          </v-switch>
+        </v-flex>
+      </v-layout>
+      <v-divider></v-divider>
+      <v-layout 
+          v-if="advanced_options"
+          ma-3
+          column 
+      > 
+      <v-flex >
+      <h3>Advanced options</h3>    
+      </v-flex>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.cpu"
+            min=1
+            max=40
+            hint="Number of threads per process"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.cpu"
+            min=1
+            :max=40
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.queue_size"
+            min=1
+            max=20
+            hint="Number of concurrent processes"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.queue_size"
+            min=1
+            :max=20
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.min_contig_length"
+            min=1
+            max=1000000
+            hint="Length curoff for contigs in final result"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.min_contig_length"
+            :min=1
+            :max=1000000
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.target_shortread_cov"
+            min=1
+            max=200
+            hint="Target long read coverage after subsampling"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.target_shortread_cov"
+            min=1
+            :max=200
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.target_longread_cov"
+            min=1
+            max=200
+            hint="Target long read coverage after subsampling"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.target_longread_cov"
+            min=1
+            :max=200
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.est_genome_size"
+            min=1
+            max=10000000
+            hint="Estimated genome size after assembly"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.est_genome_size"
+            min=1
+            :max=10000000
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.seq_padding"
+            min=1
+            max=10000
+            hint="Sequence overlap length during plasmid identification"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.seq_padding"
+            min=1
+            :max=10000
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        row
+      >
+        <v-flex xs6>      
+          <v-slider
+            v-model="config.cov_window"
+            min=20
+            max=5000
+            hint="Coverage window size"
+            :persistent-hint="true"
+            :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>      
+          <v-text-field
+            v-model="config.cov_window"
+            :min=20
+            :max=5000
+            type="number"
+            class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+    </v-layout>  
+      <v-layout>
+        <v-flex
+          xs12
+          mt-2
+          mb-2
+        >
+          <h2>Samples</h2>    
+        </v-flex>
+      </v-layout>
+
+      <v-layout>
 
         <v-flex
           xs-1
@@ -267,7 +339,7 @@ export default {
       author_email: "",
       config: {
         cpu: 5,
-        queue__size: 4,
+        queue_size: 4,
         min_contig_length: 2000,
         target_shortread_cov: 150,
         target_longread_cov: 150,

@@ -50,6 +50,7 @@ def samples_post(body=None):  # noqa: E501
     if not os.path.isdir(samplepath):
         os.mkdir(samplepath)
 
+    print(body.to_str())
     # Save config and read files for each sample in new folder
     for s in body.samples:
         conf = body.config
@@ -58,7 +59,7 @@ def samples_post(body=None):  # noqa: E501
             json.dump(conf.to_dict(), outfile)
         with open(os.path.join(samplepath, s.id, "read_locations.tsv"), 'w') as outfile:
             outfile.write(s.id + '\t' + s.path_lr + '\t'  +
-                          s.path_sr1 + '\t' +  s.path_lr + '\n')
+                          s.path_sr1 + '\t' +  s.path_sr2 + '\n')
 
     # Store informations in dict db
     db = get_db()
@@ -67,7 +68,8 @@ def samples_post(body=None):  # noqa: E501
         'author_email':s.author_email,
         'created':str(datetime.utcnow()),
         'last_updated':str(datetime.utcnow()),
-        'status':"created"
+        'status':"created",
+        'zip':None
     }
     
     return body.samples
