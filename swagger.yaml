@@ -149,12 +149,14 @@ paths:
         200:
           description: "successful"
           schema:
-            type: "object"
-            properties:
-              id:
-                type: "string"
-              result:
-                $ref: "#/definitions/Result"
+            type: "array"
+            items:
+              type: "object"
+              properties:
+                id:
+                  type: "string"
+                status:
+                  $ref: "#/definitions/Result"
 
 definitions:
   Status:
