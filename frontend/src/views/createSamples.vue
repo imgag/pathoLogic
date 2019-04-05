@@ -264,7 +264,7 @@
           xs-1
           mr-1
         >
-          <v-btn right :disabled="!valid_config && !valid_samples" @click="saveSamples">Save samples</v-btn>
+          <v-btn right :disabled="!valid_config || !valid_samples || duplicate_samples" @click="saveSamples">Save samples</v-btn>
         </v-flex>
       </v-layout>
 
@@ -280,13 +280,16 @@
             ></v-text-field>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value"/>
+          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value" v-if="props.item.path_lr"/>
+          <input type="file" @change="props.item.path_lr = $event.srcElement.value" v-else/>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value"/>
+          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value" v-if="props.item.path_sr1"/>
+          <input type="file" @change="props.item.path_sr1 = $event.srcElement.value" v-else/>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value"/>
+          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value" v-if="props.item.path_sr2"/>
+          <input type="file" @change="props.item.path_sr2 = $event.srcElement.value" v-else/>
         </td>
       </template>
       </v-data-table>
@@ -355,16 +358,17 @@ export default {
   },
   computed: {
     valid_samples () {
-      return this.samples.length && this.samples.every((sample) => sample.id !== "sample" && sample.id.length && sample.path_lr.length)
+      return (this.samples.length > 0 && this.samples.every((sample) => sample.path_lr.length))
+    },
+    duplicate_samples() {
+      // copied this code from SO https://stackoverflow.com/a/50481890
+      return !this.samples.map((s) => s.id).every(function(elem, i, array){return array.lastIndexOf(elem) === i})
     }
   },
   methods: {
     addSample () {
       this.samples.push({
-        id: 'sample',
-        path_lr: '',
-        path_sr1: '',
-        path_sr2: ''
+        id: 'sample'
       })
     },
     saveSamples () {
