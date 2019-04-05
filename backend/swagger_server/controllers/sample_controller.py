@@ -21,7 +21,17 @@ def result_sample_idget(sampleID):  # noqa: E501
     :rtype: InlineResponse2002
     """
     db = get_db()
-    return [db['samples'][sample].get('result', {}) for sample in db['samples'].keys() if sample in sampleID]
+    print(sampleID)
+    sample = [db['samples'][sample] for sample in db['samples'].keys() if sample in sampleID][0]
+    print(sample)
+
+    return {'id':sample['id'],
+                'result': {
+                    'statistics_path': 'mystats',
+                    'zip_path': sample['zip']
+                }
+            }
+
 
 
 def samples_sample_id_start_put(sampleID):  # noqa: E501
@@ -53,43 +63,47 @@ def samples_sample_id_start_put(sampleID):  # noqa: E501
     for sID in sampleID:
         db['samples'][sID]['status'] = 'started'
 
-    try:
+
+    #Try to run all this stuff
+
         # Copy input and config files to run folder
-        os.system("cat " + " ".join([os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
+        status = 0
+
+        status += os.system("cat " + " ".join([os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
                 'samples', sID, 'read_locations.tsv') for sID in sampleID]) +
                 " >> " + os.path.join(runpath, "read_locations.tsv"))
-        os.system("cp " + os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
+        status += os.system("cp " + os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
                 'samples', sampleID[0], "nf_config.json") + " " + os.path.join(runpath,
                 "nf_config.json"))
 
         # Run Hybrid assembly
-        os.system("cd " + runpath + "&& nextflow run hybridassembly -profile app \
+        status += os.system("cd " + runpath + "&& nextflow run hybridassembly -profile app \
                   -params-file nf_config.json -with-weblog \
                   http://localhost:8080/v1/nf_assembly/" + runid)
 
         # Run plasmident
-        os.system("cd " + runpath + "&& nextflow run plasmident -profile app \
+        status += os.system("cd " + runpath + "&& nextflow run plasmident -profile app \
                   -params-file nf_config.json -with-weblog \
                   http://localhost:8080/v1/nf_plasmident/" + runid)
 
-        # Zip output folders
-        zip_path = os.path.join(runspath, (runid[0:7] + 'pathoLogic_results'))
-        shutil.make_archive(zip_path, 'zip', runpath)
-        for sID in sampleID:
-            db['samples'][sID]['zip'] = zip_path
-            #TODO Add assembly stats to database
-            #db['samples'][sID]['assembly_stats'] =
+        if status == 0:
+            # Zip output folders
+            zip_path = os.path.join(runspath, (runid[0:7] + 'pathoLogic_results'))
+            stats_file = os.path.join(runspath, (runid[0:7] + 'resuls.json')) #TODO Check corect path
 
-        # Set sample status to finished
-        for sID in sampleID:
-            db['samples'][sID]['status'] = 'finished'
+            shutil.make_archive(zip_path, 'zip', runpath)
+            for sID in sampleID:
+                db['samples'][sID]['zip'] = zip_path+'.zip'
+                db['samples'][sID]['assembly_stats'] = stats_file
 
-    except:
+            # Set sample status to finished
+            for sID in sampleID:
+                db['samples'][sID]['status'] = 'finished'
 
-        # Set sample status to errored
-        for sID in sampleID:
-            db['samples'][sID]['status'] = 'error'
-
+        else:
+            # Set sample status to errored
+            for sID in sampleID:
+                db['samples'][sID]['status'] = 'error'
 
 
     return 'successful'
