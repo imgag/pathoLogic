@@ -175,42 +175,28 @@ definitions:
     type: "object"
     required: ["mode"]
     properties:
-      cpu:
-        type: "integer"
-        format: "int64"
-        minimum: 1
-        maximum: 40
-        description: "Number of threads per process"
-        default: 5
-      queue_size:
-        type: "integer"
-        format: "int64"
-        minimum: 1
-        maximum: 20
-        description: "Number of concurrent processes"
-        default: 4
-      min_contig_length:
+      minContigLength:
         type: "integer"
         format: "int64"
         minimum: 1
         maximum: 1000000
         description: "Length cutoff for contigs in final result" 
         default: 2000
-      target_shortread_cov:
+      targetShortReadCov:
         type: "integer"
         format: "int64"
         minimum: 1
         maximum: 200
         description: "Short reads are subsampled to reach this target coverage"
         default: 150
-      target_longread_cov:
+      targetLongReadCov:
         type: "integer"
         format: "int64"
         minimum: 1
         maximum: 200
         description: "Long reads are subsampled to reach this target coverage"
         default: 150
-      est_genome_size:
+      genomeSize:
          type: "integer"
          format: "int64"
          minimum: 1
@@ -228,20 +214,41 @@ definitions:
            - "flye"
          description: "Different assembly methods"
          default: "unicycler"
-      seq_padding:
+      seqPadding:
           type: "integer"
           format: "int64"
           minimum: 1
           maximum: 10000
           description: "Number of bases added at sequence ends to improve alignment quality in plasmid identification"
           default: 1000
-      cov_window:
+      covWindow:
           type: "integer"
           format: "int64"
           minimum: 20
           maximum: 5000
           description: "Window size for coverage calculation" 
           default: 50
+      maxLength:
+          type: "integer"
+          format: "int64"
+          minimum: 2000
+          maximum: 1000000
+          description: "Maximum contig length considered plasmid search" 
+          default: 500000
+      minLength:
+          type: "integer"
+          format: "int64"
+          minimum: 2000
+          maximum: 1000000
+          description: "Minimum contig length considered plasmid search" 
+          default: 5000
+      mappingCov:
+          type: "integer"
+          format: "int64"
+          minimum: 2000
+          maximum: 1000000
+          description: "Minimum contig length considered plasmid search" 
+          default: 5000
   Sample:
     type: "object"
     properties:
