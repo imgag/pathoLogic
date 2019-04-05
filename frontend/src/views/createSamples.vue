@@ -264,7 +264,7 @@
           xs-1
           mr-1
         >
-          <v-btn right :disabled="!valid_config || !valid_samples || duplicate_samples" @click="saveSamples">Save samples</v-btn>
+          <v-btn right :disabled="!valid_config || duplicate_samples" @click="saveSamples">Save samples</v-btn>
         </v-flex>
       </v-layout>
 
@@ -358,7 +358,7 @@ export default {
   },
   computed: {
     valid_samples () {
-      return (this.samples.length > 0 && this.samples.every((sample) => sample.path_lr.length))
+      return (this.samples.length > 0 && this.samples.every((s) => s.path_lr !== undefined))
     },
     duplicate_samples() {
       // copied this code from SO https://stackoverflow.com/a/50481890

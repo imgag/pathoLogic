@@ -55,26 +55,26 @@ def samples_post(body=None):  # noqa: E501
     if not os.path.isdir(samplepath):
         os.mkdir(samplepath)
 
-    print(body.to_str())
+    print(body)
     # Save config and read files for each sample in new folder
-    for s in body.samples:
-        conf = body.config
-        os.mkdir(os.path.join(samplepath, s.id))
-        with open(os.path.join(samplepath, s.id, "nf_config.json"), 'w') as outfile:
-            json.dump(conf.to_dict(), outfile)
-        with open(os.path.join(samplepath, s.id, "read_locations.tsv"), 'w') as outfile:
-            paths = [join_read_path_with_data_dir(read_path) for read_path in [s.path_lr, s.path_sr1, s.path_sr2] if len(read_path)]
-            outfile.write(s.id + '\t' + "\t".join(paths) + '\n')
+    for s in body['samples']:
+        conf = body['config']
+        os.mkdir(os.path.join(samplepath, s['id']))
+        with open(os.path.join(samplepath, s['id'], "nf_config.json"), 'w') as outfile:
+            json.dump(conf, outfile)
+        with open(os.path.join(samplepath, s['id'], "read_locations.tsv"), 'w') as outfile:
+            paths = [join_read_path_with_data_dir(read_path) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
+            outfile.write(s['id'] + '\t' + "\t".join(paths) + '\n')
 
     # Store informations in dict db
     db = get_db()
-    db['samples'][s.id] = {
-        'id':s.id,
-        'author_email':s.author_email,
+    db['samples'][s['id']] = {
+        'id':s['id'],
+        'author_email':s['author_email'],
         'created':str(datetime.utcnow()),
         'last_updated':str(datetime.utcnow()),
         'status':"created",
         'zip':None
     }
     
-    return body.samples
+    return body['samples']
