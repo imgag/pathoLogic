@@ -1,0 +1,359 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: caspar.gross@med.uni-tuebingen.de
+  description: Frontend for the pathoLogic pipeline
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: pathoLogic
+  version: 0.1.0
+externalDocs:
+  description: Find out more about pathoLogic
+  url: http://github.com/imgag/pathoLogic
+servers:
+- url: /v1
+tags:
+- description: Sample information
+  name: sample
+- description: Process status
+  name: status
+- description: Sample results
+  name: result
+- description: File related stuff
+  name: files
+paths:
+  /download/{filePath}:
+    get:
+      description: Download a result file from given path
+      operationId: download_file_path_get
+      parameters:
+      - description: Path to the file
+        explode: false
+        in: path
+        name: filePath
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/zip:
+              schema:
+                format: binary
+                type: string
+          description: successfull
+      tags:
+      - files
+      x-openapi-router-controller: openapi_server.controllers.files_controller
+  /result/{sampleID}:
+    get:
+      operationId: result_sample_idget
+      parameters:
+      - description: Comma seperated list of results to return
+        explode: false
+        in: path
+        name: sampleID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200_2'
+                type: array
+          description: successful
+      summary: Lists results for given sample
+      tags:
+      - result
+      x-openapi-router-controller: openapi_server.controllers.result_controller
+  /samples:
+    get:
+      operationId: samples_get
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Sample'
+                type: array
+          description: successful
+      summary: List all samples
+      tags:
+      - samples
+      x-openapi-router-controller: openapi_server.controllers.samples_controller
+    post:
+      operationId: samples_post
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          application/json:
+            schema:
+              properties:
+                config:
+                  $ref: '#/components/schemas/Config'
+                samples:
+                  items:
+                    $ref: '#/components/schemas/Sample'
+                  type: array
+              type: object
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Sample'
+                type: array
+          description: successful
+      summary: Create new samples
+      tags:
+      - samples
+      x-openapi-router-controller: openapi_server.controllers.samples_controller
+  /samples/{sampleID}/start:
+    put:
+      operationId: samples_sample_id_start_put
+      parameters:
+      - explode: false
+        in: path
+        name: sampleID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: successful
+      summary: Starts one or multiple sample via ID
+      tags:
+      - sample
+      x-openapi-router-controller: openapi_server.controllers.sample_controller
+  /status:
+    get:
+      operationId: status_get
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                type: array
+          description: successful
+      summary: Get list of all sample statuses
+      tags:
+      - status
+      x-openapi-router-controller: openapi_server.controllers.status_controller
+  /status/{sampleID}:
+    get:
+      operationId: status_sample_idget
+      parameters:
+      - description: Comma seperated list of results to return
+        explode: false
+        in: path
+        name: sampleID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: successful
+        404:
+          description: Sample(s) not found
+      summary: Get status for one or more samples
+      tags:
+      - status
+      x-openapi-router-controller: openapi_server.controllers.status_controller
+components:
+  requestBodies:
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+  schemas:
+    Status:
+      enum:
+      - created
+      - started
+      - finished
+      - error
+      type: string
+    Result:
+      example:
+        statistics_path: statistics_path
+        zip_path: zip_path
+      properties:
+        statistics_path:
+          type: string
+        zip_path:
+          type: string
+      type: object
+    Config:
+      properties:
+        minContigLength:
+          default: 2000
+          description: Length cutoff for contigs in final result
+          format: int64
+          maximum: 1000000
+          minimum: 1
+          type: integer
+        targetShortReadCov:
+          default: 150
+          description: Short reads are subsampled to reach this target coverage
+          format: int64
+          maximum: 200
+          minimum: 1
+          type: integer
+        targetLongReadCov:
+          default: 150
+          description: Long reads are subsampled to reach this target coverage
+          format: int64
+          maximum: 200
+          minimum: 1
+          type: integer
+        genomeSize:
+          default: 5300000
+          description: Estimated approximate final genome size of assembled bacteria.
+            Used for coverage calculations
+          format: int64
+          maximum: 10000000
+          minimum: 1
+          type: integer
+        mode:
+          default: unicycler
+          description: Different assembly methods
+          enum:
+          - all
+          - unicycler
+          - spades
+          - miniasm
+          - canu
+          - flye
+          type: string
+        seqPadding:
+          default: 1000
+          description: Number of bases added at sequence ends to improve alignment
+            quality in plasmid identification
+          format: int64
+          maximum: 10000
+          minimum: 1
+          type: integer
+        covWindow:
+          default: 50
+          description: Window size for coverage calculation
+          format: int64
+          maximum: 5000
+          minimum: 20
+          type: integer
+        maxLength:
+          default: 500000
+          description: Maximum contig length considered plasmid search
+          format: int64
+          maximum: 1000000
+          minimum: 2000
+          type: integer
+        minLength:
+          default: 5000
+          description: Minimum contig length considered plasmid search
+          format: int64
+          maximum: 1000000
+          minimum: 2000
+          type: integer
+        mappingCov:
+          default: 5000
+          description: Minimum contig length considered plasmid search
+          format: int64
+          maximum: 1000000
+          minimum: 2000
+          type: integer
+      required:
+      - mode
+      type: object
+    Sample:
+      example:
+        path_sr1: path_sr1
+        path_sr2: path_sr2
+        last_updated: 2000-01-23
+        path_lr: path_lr
+        created: 2000-01-23
+        author_email: author_email
+        id: id
+      properties:
+        id:
+          type: string
+        author_email:
+          format: email
+          type: string
+        created:
+          format: date
+          type: string
+        last_updated:
+          format: date
+          type: string
+        path_lr:
+          type: string
+        path_sr1:
+          type: string
+        path_sr2:
+          type: string
+      type: object
+    inline_response_200:
+      example:
+        id: id
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/Status'
+    inline_response_200_1:
+      example:
+        id: id
+        status:
+          path_sr1: path_sr1
+          path_sr2: path_sr2
+          last_updated: 2000-01-23
+          path_lr: path_lr
+          created: 2000-01-23
+          author_email: author_email
+          id: id
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/Sample'
+    inline_object:
+      properties:
+        config:
+          $ref: '#/components/schemas/Config'
+        samples:
+          items:
+            $ref: '#/components/schemas/Sample'
+          type: array
+      type: object
+    inline_response_200_2:
+      example:
+        id: id
+        status:
+          statistics_path: statistics_path
+          zip_path: zip_path
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/Result'
