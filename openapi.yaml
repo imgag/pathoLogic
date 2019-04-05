@@ -150,12 +150,14 @@ paths:
           content:
             "*/*":
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  result:
-                    $ref: "#/components/schemas/Result"
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      $ref: "#/components/schemas/Result"
 externalDocs:
   description: Find out more about pathoLogic
   url: http://github.com/imgag/pathoLogic
