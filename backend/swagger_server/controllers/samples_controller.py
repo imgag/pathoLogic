@@ -1,6 +1,7 @@
 import connexion
 import six
 import os
+import ntpath
 import json
 
 from datetime import datetime
@@ -12,12 +13,21 @@ from swagger_server.db import get_db
 from swagger_server import util
 
 def format_sample(obj):
+    """
+    Format a sample
+    """
     return {
         'id': obj['id'],
         'author_email': obj['author_email'],
         'created': obj['created'],
         'last_updated': obj['last_updated']
     }
+
+def join_read_path_with_data_dir(read_path):
+    """
+    Joins a read path with the data directory
+    """
+    return os.path.join(os.getenv('DATA_DIR', os.getcwd()), ntpath.basename(read_path))
 
 def samples_get():  # noqa: E501
     """List all samples
@@ -58,8 +68,8 @@ def samples_post(body=None):  # noqa: E501
         with open(os.path.join(samplepath, s.id, "nf_config.json"), 'w') as outfile:
             json.dump(conf.to_dict(), outfile)
         with open(os.path.join(samplepath, s.id, "read_locations.tsv"), 'w') as outfile:
-            outfile.write(s.id + '\t' + s.path_lr + '\t'  +
-                          s.path_sr1 + '\t' +  s.path_sr2 + '\n')
+            paths = [join_read_path_with_data_dir(read_path) for read_path in [s.path_lr, s.path_sr1, s.path_sr2] if len(read_path)]
+            outfile.write(s.id + '\t' + "\t".join(paths) + '\n')
 
     # Store informations in dict db
     db = get_db()
