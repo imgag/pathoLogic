@@ -28,10 +28,7 @@ export default new Vuex.Store({
     addStatus (state, status) {
       let sample = state.samples.find((s) => s.id === status.id)
       let index = state.samples.indexOf(sample)
-      state.samples[index] = {
-        ...sample,
-        status: status.status
-      }
+      state.samples.splice(index, 1, { ...sample, status: status.status })
     },
     updateFilterIDs (state, ids) {
       state.sample_filter_by_ids = ids

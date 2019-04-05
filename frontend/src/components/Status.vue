@@ -7,7 +7,6 @@
         name: "Status",
         props: {
             status: {
-                type: String,
                 required: true
             }
         },
