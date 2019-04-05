@@ -46,10 +46,7 @@ paths:
           description: Comma seperated list of results to return
           required: true
           schema:
-            type: array
-            items:
-              type: string
-              minItems: 1
+            type: string
       responses:
         "200":
           description: successful
@@ -113,10 +110,7 @@ paths:
           in: path
           required: true
           schema:
-            type: array
-            items:
-              type: string
-              minItems: 1
+            type: string
       responses:
         "200":
           description: successful
@@ -140,10 +134,7 @@ paths:
           description: Comma seperated list of results to return
           required: true
           schema:
-            type: array
-            items:
-              type: string
-              minItems: 1
+            type: string
       responses:
         "200":
           description: successful
