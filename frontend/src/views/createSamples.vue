@@ -273,7 +273,12 @@
         :items="samples"
       >
       <template slot="items" slot-scope="props">
-        <td> <editable :content="props.item.id"/></td>
+        <td>
+            <v-text-field
+                :value="props.item.id"
+                @change="props.item.id = $event"
+            ></v-text-field>
+        </td>
         <td class="text-xs-left">
           <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value"/>
         </td>
@@ -290,12 +295,7 @@
 </template>
 
 <script>
-import Editable from '@/components/Editable.vue'
-
 export default {
-  components: {
-    Editable
-  },
   name: 'createSample',
   data () {
     return {
