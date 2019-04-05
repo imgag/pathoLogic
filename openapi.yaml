@@ -1,0 +1,281 @@
+openapi: 3.0.0
+info:
+  description: Frontend for the pathoLogic pipeline
+  version: 0.1.0
+  title: pathoLogic
+  contact:
+    email: caspar.gross@med.uni-tuebingen.de
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+tags:
+  - name: sample
+    description: Sample information
+  - name: status
+    description: Process status
+  - name: result
+    description: Sample results
+paths:
+  /status:
+    get:
+      tags:
+        - status
+      summary: Get list of all sample statuses
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      $ref: "#/components/schemas/Status"
+  "/status/{sampleID}":
+    get:
+      tags:
+        - status
+      summary: Get status for one or more samples
+      parameters:
+        - name: sampleID
+          in: path
+          description: Comma seperated list of results to return
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              minItems: 1
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    $ref: "#/components/schemas/Sample"
+        "404":
+          description: Sample(s) not found
+  /samples:
+    get:
+      tags:
+        - samples
+      summary: List all samples
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sample"
+    post:
+      tags:
+        - samples
+      summary: Create new samples
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                config:
+                  $ref: "#/components/schemas/Config"
+                samples:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/Sample"
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sample"
+  "/samples/{sampleID}/start":
+    put:
+      tags:
+        - sample
+      summary: Starts one or multiple sample via ID
+      parameters:
+        - name: sampleID
+          in: path
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              minItems: 1
+      responses:
+        "200":
+          description: successful
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  status:
+                    $ref: "#/components/schemas/Status"
+  "/result/{sampleID}":
+    get:
+      tags:
+        - sample
+      summary: Lists results for given sample
+      parameters:
+        - name: sampleID
+          in: path
+          description: Comma seperated list of results to return
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              minItems: 1
+      responses:
+        "200":
+          description: successful
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  result:
+                    $ref: "#/components/schemas/Result"
+externalDocs:
+  description: Find out more about pathoLogic
+  url: http://github.com/imgag/pathoLogic
+servers:
+  - url: /v1
+components:
+  schemas:
+    Status:
+      type: string
+      enum:
+        - created
+        - started
+        - finished
+        - error
+    Result:
+      type: object
+      properties:
+        statistics_path:
+          type: string
+        zip_path:
+          type: string
+    Config:
+      type: object
+      required:
+        - mode
+      properties:
+        minContigLength:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 1000000
+          description: Length cutoff for contigs in final result
+          default: 2000
+        targetShortReadCov:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 200
+          description: Short reads are subsampled to reach this target coverage
+          default: 150
+        targetLongReadCov:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 200
+          description: Long reads are subsampled to reach this target coverage
+          default: 150
+        genomeSize:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 10000000
+          description: Estimated approximate final genome size of assembled bacteria. Used
+            for coverage calculations
+          default: 5300000
+        mode:
+          type: string
+          enum:
+            - all
+            - unicycler
+            - spades
+            - miniasm
+            - canu
+            - flye
+          description: Different assembly methods
+          default: unicycler
+        seqPadding:
+          type: integer
+          format: int64
+          minimum: 1
+          maximum: 10000
+          description: Number of bases added at sequence ends to improve alignment quality
+            in plasmid identification
+          default: 1000
+        covWindow:
+          type: integer
+          format: int64
+          minimum: 20
+          maximum: 5000
+          description: Window size for coverage calculation
+          default: 50
+        maxLength:
+          type: integer
+          format: int64
+          minimum: 2000
+          maximum: 1000000
+          description: Maximum contig length considered plasmid search
+          default: 500000
+        minLength:
+          type: integer
+          format: int64
+          minimum: 2000
+          maximum: 1000000
+          description: Minimum contig length considered plasmid search
+          default: 5000
+        mappingCov:
+          type: integer
+          format: int64
+          minimum: 2000
+          maximum: 1000000
+          description: Minimum contig length considered plasmid search
+          default: 5000
+    Sample:
+      type: object
+      properties:
+        id:
+          type: string
+        author_email:
+          type: string
+          format: email
+        created:
+          type: string
+          format: date
+        last_updated:
+          type: string
+          format: date
+        path_lr:
+          type: string
+        path_sr1:
+          type: string
+        path_sr2:
+          type: string
+
