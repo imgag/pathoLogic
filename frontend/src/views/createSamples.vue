@@ -74,7 +74,7 @@
           <v-text-field
             v-model="config.cpu"
             min=1
-            :max=40
+            max=40
             type="number"
             class="mt-0"
           />
@@ -97,7 +97,7 @@
           <v-text-field
             v-model="config.queue_size"
             min=1
-            :max=20
+            max=20
             type="number"
             class="mt-0"
           />
@@ -119,8 +119,8 @@
         <v-flex xs2 ml-5>      
           <v-text-field
             v-model="config.min_contig_length"
-            :min=1
-            :max=1000000
+            min=1
+            max=1000000
             type="number"
             class="mt-0"
           />
@@ -143,7 +143,7 @@
           <v-text-field
             v-model="config.target_shortread_cov"
             min=1
-            :max=200
+            max=200
             type="number"
             class="mt-0"
           />
@@ -166,7 +166,7 @@
           <v-text-field
             v-model="config.target_longread_cov"
             min=1
-            :max=200
+            max=200
             type="number"
             class="mt-0"
           />
@@ -189,7 +189,7 @@
           <v-text-field
             v-model="config.est_genome_size"
             min=1
-            :max=10000000
+            max=10000000
             type="number"
             class="mt-0"
           />
@@ -212,7 +212,7 @@
           <v-text-field
             v-model="config.seq_padding"
             min=1
-            :max=10000
+            max=10000
             type="number"
             class="mt-0"
           />
@@ -234,8 +234,8 @@
         <v-flex xs2 ml-5>      
           <v-text-field
             v-model="config.cov_window"
-            :min=20
-            :max=5000
+            min=20
+            max=5000
             type="number"
             class="mt-0"
           />
