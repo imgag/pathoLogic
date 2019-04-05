@@ -20,7 +20,33 @@ tags:
   name: status
 - description: Sample results
   name: result
+- description: File related stuff
+  name: files
 paths:
+  /download/{filePath}:
+    get:
+      description: Download a result file from given path
+      operationId: download_file_path_get
+      parameters:
+      - description: Path to the file
+        explode: false
+        in: path
+        name: filePath
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/zip:
+              schema:
+                format: binary
+                type: string
+          description: successfull
+      tags:
+      - files
+      x-openapi-router-controller: openapi_server.controllers.files_controller
   /result/{sampleID}:
     get:
       operationId: result_sample_idget
@@ -44,8 +70,8 @@ paths:
           description: successful
       summary: Lists results for given sample
       tags:
-      - sample
-      x-openapi-router-controller: openapi_server.controllers.sample_controller
+      - result
+      x-openapi-router-controller: openapi_server.controllers.result_controller
   /samples:
     get:
       operationId: samples_get

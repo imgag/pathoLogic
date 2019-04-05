@@ -6,7 +6,7 @@ import pickle
 
 import connexion
 from flask_cors import CORS
-from flask import request, send_from_directory, g
+from flask import request, g
 
 from openapi_server import encoder
 from openapi_server.db import get_db
@@ -32,10 +32,6 @@ def main():
 
         if db is not None:
             pickle.dump(db, open(os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'pathoLogic.db'), 'wb'))
-
-    @app.app.route('/v1/result/<path:path>')
-    def send_result(path):
-        return send_from_directory('runs', path)
     
     # Create route for nextflow weblog (assembly)
     @app.app.route('/v1/nf_assembly/<runid>', methods=['POST'])

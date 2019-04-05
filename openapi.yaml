@@ -15,7 +15,29 @@ tags:
     description: Process status
   - name: result
     description: Sample results
+  - name: files
+    description: File related stuff
 paths:
+  "/download/{filePath}":
+    get:
+      tags:
+        - files
+      description: Download a result file from given path
+      parameters:
+        - name: filePath
+          in: path
+          description: Path to the file
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successfull
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
   /status:
     get:
       tags:
@@ -126,7 +148,7 @@ paths:
   "/result/{sampleID}":
     get:
       tags:
-        - sample
+        - result
       summary: Lists results for given sample
       parameters:
         - name: sampleID
