@@ -124,20 +124,6 @@ export default {
   },
   mounted () {
     let vm = this
-//  if (window.webpackHotUpdate) {
-// eslint-disable-next-line
-    if (false) {
-      vm.$store.commit('addSamples', [{
-        "id": 1,
-        "author_email": "lennard.berger@student.uni-tuebingen.de",
-        "created": new Date().toISOString(),
-        "last_updated": new Date().toISOString(),
-      }])
-      vm.$store.commit('addStatus', {
-        "id": 1,
-        "status": "created"
-      })
-    } else {
       fetch(`${vm.$basePath}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
         return Promise.resolve(vm.$store.commit('addSamples', projects))
       }).then(() => fetch(`${vm.$basePath}/status`)).then((response) => response.json()).then((result) => { // fetch status
@@ -146,6 +132,5 @@ export default {
         })
       })
     }
-  }
 }
 </script>
