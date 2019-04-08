@@ -8,6 +8,7 @@
     :headers="headers"
     :items="$store.getters.samples"
   >
+    <error-modal :active="statusChangeFailed"></error-modal>
     <template slot="items" slot-scope="props">
       <td v-if="props.item.status === 'finished'">
         <router-link :to="{ name: 'result', params: { id: props.item.id } }">{{ props.item.id }}</router-link>
@@ -45,15 +46,18 @@
 
 <script>
 import Status from '@/components/Status'
+import ErrorModal from '@/components/ErrorModal'
 
 export default {
   name: 'samples',
   components: {
     Status,
+    ErrorModal
   },
   data () {
     return {
       selected_samples: [],
+      statusChangeFailed: false,
       headers: [
         {
           text: 'Sample ID',
@@ -113,13 +117,19 @@ export default {
 
       fetch(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
         method: 'PUT'
-      }).then((result) => {
-        let status = (result.status === 200) ? 'started' : 'error'
+      }).then((response) => {
+        let status = ""
+        if (response.status === 200) {
+          status = "started"
+        } else {
+          status = "error"
+          vm.statusChangeFailed = true
+        }
 
         vm.selected_samples.forEach((sample) => {
           vm.$store.commit('addStatus', { "id": sample.id, "status": status })
         })
-      }) // TODO: Handle error
+      }).catch(() => vm.statusChangeFailed = true)
     }
   },
   mounted () {

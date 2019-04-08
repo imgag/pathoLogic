@@ -1,9 +1,9 @@
 <template>
-
   <v-layout
     justify-center 
     align-start
   >
+    <error-modal :active="submissionFailed" :errorMessage="errorMessage" @close="submissionFailed = false"></error-modal>
     <v-form v-model="valid_config">
       <v-flex>
       <h2>Configuration</h2>    
@@ -298,8 +298,13 @@
 </template>
 
 <script>
+import ErrorModal from '@/components/ErrorModal'
+
 export default {
   name: 'createSample',
+  components: {
+    ErrorModal
+  },
   data () {
     return {
       headers: [
@@ -340,6 +345,7 @@ export default {
       advanced_options: false,
       valid_config: false,
       author_email: "",
+      submissionFailed: false,
       config: {
         cpu: 5,
         queue_size: 4,
@@ -394,9 +400,13 @@ export default {
       }).then((response) => { // TODO: Add visual feedback
         if (response.status === 200) {
           vm.$store.commit('addSamples', samples.map((sample) => sample.status = 'created'))
+          vm.$router.push({name: 'samples'})
+        } else {
+          vm.submissionFailed = true
         }
-        vm.$router.push({name: 'samples'})
-      }).catch(() => vm.$router.push({name: 'samples'}))
+      }).catch(() => {
+        vm.submissionFailed = true
+      })
     }
   }
 }
