@@ -281,16 +281,16 @@
             ></v-text-field>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value" v-if="props.item.path_lr"/>
-          <input type="file" @change="props.item.path_lr = $event.srcElement.value" v-else/>
+          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_lr"/>
+          <input type="file" @change="props.item.path_lr = $event.srcElement.value" accept=".fastq,.gz" v-else/>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value" v-if="props.item.path_sr1"/>
-          <input type="file" @change="props.item.path_sr1 = $event.srcElement.value" v-else/>
+          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_sr1"/>
+          <input type="file" @change="props.item.path_sr1 = $event.srcElement.value" accept=".fastq,.gz" v-else/>
         </td>
         <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value" v-if="props.item.path_sr2"/>
-          <input type="file" @change="props.item.path_sr2 = $event.srcElement.value" v-else/>
+          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_sr2"/>
+          <input type="file" @change="props.item.path_sr2 = $event.srcElement.value" accept=".fastq,.gz" v-else/>
         </td>
       </template>
       </v-data-table>
