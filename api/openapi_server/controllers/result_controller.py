@@ -1,3 +1,5 @@
+import os
+
 import connexion
 import six
 
@@ -18,11 +20,10 @@ def result_sample_idget(sample_id):  # noqa: E501
     db = get_db()
     samples = sample_id.split(',')
     sample = [db['samples'][sample] for sample in db['samples'].keys() if sample in samples][0]
-    print(sample)
 
     return {'id':sample['id'],
                 'result': {
                     'statistics_path': 'mystats',
-                    'zip_path': sample['zip']
+                    'zip_path': os.path.basename(sample['zip'])
                 }
             }

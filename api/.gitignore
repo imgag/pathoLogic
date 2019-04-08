@@ -62,3 +62,8 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+# runtime files for pathoLogic
+runs/
+samples/
+*.db

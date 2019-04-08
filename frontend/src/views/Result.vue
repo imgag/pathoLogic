@@ -3,12 +3,10 @@
         justify-center
         align-top
     >
-    <v-flex xs12 mb-2>
-        <v-btn :href="statistics_path">Download the statistics</v-btn>
-    </v-flex>
 
     <v-flex xs12>
-        <v-btn :href="zip_path">Download full archive</v-btn>
+        <p>You can download the results as a zip archive</p>
+        <v-btn :href="zip_url">Download archive</v-btn>
     </v-flex>
 
     </v-layout>
@@ -19,8 +17,7 @@ export default {
     name: 'result',
     data () {
         return {
-            statistics_path: '',
-            zip_path: ''
+            zip_url: ''
         }
     },
     mounted () {
@@ -28,8 +25,7 @@ export default {
         fetch(`${vm.$basePath}/result/${vm.$route.params.id}`)
             .then((result) => Promise.resolve(result.json()))
             .then((content) => {
-                vm.statistics_path = content.statistics_path
-                vm.zip_path = content.zip_path
+                vm.zip_url = `${vm.$basePath}/download/${content.result.zip_path}`
             })
     }
 }
