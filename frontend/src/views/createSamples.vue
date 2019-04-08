@@ -3,7 +3,8 @@
     justify-center 
     align-start
   >
-    <error-modal :active="submissionFailed" @close="submissionFailed = false"></error-modal>
+    <error-modal :active="submissionFailed" @close="submissionFailed = false" :errorMessage="submissionError" v-if="submissionError.length"></error-modal>
+    <error-modal :active="submissionFailed" @close="submissionFailed = false" v-else></error-modal>
     <v-form v-model="valid_config">
       <v-flex>
       <h2>Configuration</h2>    
@@ -264,7 +265,7 @@
           xs-1
           mr-1
         >
-          <v-btn right :disabled="!valid_config || duplicate_samples" @click="saveSamples">Save samples</v-btn>
+          <v-btn right :disabled="!valid_config || !this.samples.length || duplicate_samples()" @click="saveSamples">Save samples</v-btn>
         </v-flex>
       </v-layout>
 
@@ -346,6 +347,7 @@ export default {
       valid_config: false,
       author_email: "",
       submissionFailed: false,
+      submissionError: "",
       config: {
         cpu: 5,
         queue_size: 4,
@@ -362,19 +364,14 @@ export default {
       ]
     }
   },
-  computed: {
-    valid_samples () {
-      return (this.samples.length > 0 && this.samples.every((s) => s.path_lr !== undefined))
-    },
+  methods: {
     duplicate_samples() {
       // copied this code from SO https://stackoverflow.com/a/50481890
       return !this.samples.map((s) => s.id).every(function(elem, i, array){return array.lastIndexOf(elem) === i})
-    }
-  },
-  methods: {
+    },
     addSample () {
       this.samples.push({
-        id: 'sample'
+        id: `sample${Date.now()}`
       })
     },
     saveSamples () {
@@ -402,7 +399,10 @@ export default {
           vm.$store.commit('addSamples', samples.map((sample) => sample.status = 'created'))
           vm.$router.push({name: 'samples'})
         } else {
-          vm.submissionFailed = true
+          response.json().then((err) => {
+            vm.submissionError = err.detail
+            vm.submissionFailed = true
+          }).catch(() => vm.submissionFailed = true)
         }
       }).catch(() => {
         vm.submissionFailed = true

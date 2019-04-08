@@ -56,16 +56,17 @@ def samples_post(body=None):  # noqa: E501
     if not os.path.isdir(samplepath):
         os.mkdir(samplepath)
 
-    print(body)
     # Save config and read files for each sample in new folder
     for s in body['samples']:
         conf = body['config']
         if os.path.isdir(os.path.join(samplepath, s['id'])):
-            raise BadRequest("Sample with sample id exists already")
+            raise BadRequest("Sample with ID: {} exists already.".format(s['id']))
         os.mkdir(os.path.join(samplepath, s['id']))
         with open(os.path.join(samplepath, s['id'], "nf_config.json"), 'w') as outfile:
             json.dump(conf, outfile)
         with open(os.path.join(samplepath, s['id'], "read_locations.tsv"), 'w') as outfile:
+            if not "path_lr" in s:
+                raise BadRequest("Submitted incomplete sample {}, long run path is missing.".format(s['id']))
             paths = [join_read_path_with_data_dir(read_path) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
             outfile.write(s['id'] + '\t' + "\t".join(paths) + '\n')
 
