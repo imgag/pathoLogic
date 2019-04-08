@@ -4,6 +4,7 @@ import uuid
 import os
 import shutil
 
+from werkzeug.exceptions import BadRequest
 from openapi_server.db import get_db
 from openapi_server.models.inline_response200 import InlineResponse200  # noqa: E501
 from openapi_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
@@ -64,7 +65,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
         if status == 0:
             # Zip output folders
             zip_path = os.path.join(runspath, (runid[0:7] + 'pathoLogic_results'))
-            stats_file = os.path.join(runspath, (runid[0:7] + 'resuls.json')) #TODO Check corect path
+            stats_file = os.path.join(runspath, (runid[0:7] + 'results.json')) #TODO Check corect path
 
             shutil.make_archive(zip_path, 'zip', runpath)
             for sID in samples:
@@ -80,6 +81,6 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
             for sID in samples:
                 db['samples'][sID]['status'] = 'error'
 
+            raise BadRequest("Process exited with status {}".format(status))
 
     return 'successful'
-
