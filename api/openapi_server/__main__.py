@@ -59,7 +59,8 @@ def main():
                 db['samples'][sID]['status'] = 'finished'
         return 'NF Request received'
 
-    app.run(port=os.getenv('HTTP_PORT', 8080), debug=True, use_debugger=True, use_reloader=True, passthrough_errors=True)
+    production = os.getenv('PRODUCTION', False)
+    app.run(port=os.getenv('HTTP_PORT', 8080), debug=not production, use_debugger=not production, use_reloader=not production, passthrough_errors=not production)
 
 if __name__ == '__main__':
     main()
