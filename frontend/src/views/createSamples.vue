@@ -3,7 +3,7 @@
     justify-center 
     align-start
   >
-    <error-modal :active="submissionFailed" :errorMessage="errorMessage" @close="submissionFailed = false"></error-modal>
+    <error-modal :active="submissionFailed" @close="submissionFailed = false"></error-modal>
     <v-form v-model="valid_config">
       <v-flex>
       <h2>Configuration</h2>    
