@@ -7,6 +7,7 @@ import json
 from datetime import datetime
 
 from flask import current_app, g
+from werkzeug.exceptions import BadRequest
 from openapi_server.models.sample import Sample  # noqa: E501
 from openapi_server.db import get_db
 from openapi_server import util
@@ -59,6 +60,8 @@ def samples_post(body=None):  # noqa: E501
     # Save config and read files for each sample in new folder
     for s in body['samples']:
         conf = body['config']
+        if os.path.isdir(os.path.join(samplepath, s['id'])):
+            raise BadRequest("Sample with sample id exists already")
         os.mkdir(os.path.join(samplepath, s['id']))
         with open(os.path.join(samplepath, s['id'], "nf_config.json"), 'w') as outfile:
             json.dump(conf, outfile)
