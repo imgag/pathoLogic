@@ -127,7 +127,7 @@ export default {
         }
 
         vm.selected_samples.forEach((sample) => {
-          vm.$store.commit('addStatus', { "id": sample.id, "status": status })
+          vm.$store.commit('addStatus', { "id": sample, "status": status })
         })
       }).catch(() => vm.statusChangeFailed = true)
     }
