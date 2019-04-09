@@ -37,10 +37,9 @@ def main():
     @app.app.route('/v1/nf_assembly/<runid>', methods=['POST'])
     def nf_assembly(runid):
         req_data = request.get_json()
-        print(req_data)
         db = get_db()
-        db['status_assembly'][runid] = req_data
-        print(json.dumps(db['status'][runid]))
+        db['status_hybridassembly'][runid] = req_data
+        #print(json.dumps(db['status_assembly'][runid]))
         if req_data['event'] == 'process_completed':
             for sID in db['runs'][runid]:
                 db['samples'][sID]['status'] = 'finished'
@@ -50,10 +49,9 @@ def main():
     @app.app.route('/v1/nf_plasmident/<runid>', methods=['POST'])
     def nf_plasmident(runid):
         req_data = request.get_json()
-        print(req_data)
         db = get_db()
         db['status_plasmident'][runid] = req_data
-        print(json.dumps(db['status'][runid]))
+        #print(json.dumps(db['status_plasmident'][runid]))
         if req_data['event'] == 'process_completed':
             for sID in db['runs'][runid]:
                 db['samples'][sID]['status'] = 'finished'

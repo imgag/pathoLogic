@@ -12,6 +12,7 @@ def get_db():
             g.db = {}
             g.db['samples'] = {}
             g.db['runs'] = {}
-            g.db['status_assembly'] = {}
+            g.db['status_hybridassembly'] = {}
+            g.db['status_plasmident'] = {}
 
     return g.db
