@@ -405,6 +405,7 @@ export default {
           }).catch(() => vm.submissionFailed = true)
         }
       }).catch(() => {
+        vm.submissionError = ''
         vm.submissionFailed = true
       })
     }
