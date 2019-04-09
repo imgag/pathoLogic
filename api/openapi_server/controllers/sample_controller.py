@@ -40,8 +40,8 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
     # Get current database
     db = get_db()
 
-    db['runs'][runid] = sample_id
     samples = sample_id.split(',')
+    db['runs'][runid] = samples
 
     # Set sample status to started
     for sID in samples:
