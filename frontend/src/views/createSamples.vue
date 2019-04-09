@@ -63,7 +63,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.min_contig_length"
+            v-model="config.minContigLength"
             min=1
             max=1000000
             hint="Length curoff for contigs in final result"
@@ -73,7 +73,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.min_contig_length"
+            v-model="config.minContigLength"
             min=1
             max=1000000
             type="number"
@@ -86,7 +86,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.target_shortread_cov"
+            v-model="config.targetShortReadCov"
             min=1
             max=200
             hint="Target long read coverage after subsampling"
@@ -96,7 +96,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.target_shortread_cov"
+            v-model="config.targetShortReadCov"
             min=1
             max=200
             type="number"
@@ -109,7 +109,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.target_longread_cov"
+            v-model="config.targetLongReadCov"
             min=1
             max=200
             hint="Target long read coverage after subsampling"
@@ -119,7 +119,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.target_longread_cov"
+            v-model="config.targetLongReadCov"
             min=1
             max=200
             type="number"
@@ -132,7 +132,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.genome_size"
+            v-model="config.genomeSize"
             min=1
             max=10000000
             hint="Estimated approximate final genome size of assembled bacteria. Used for coverage calculations"
@@ -142,7 +142,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.genome_size"
+            v-model="config.genomeSize"
             min=1
             max=10000000
             type="number"
@@ -155,7 +155,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.seq_padding"
+            v-model="config.seqPadding"
             min=1
             max=10000
             hint="Number of bases added at sequence ends to improve alignment quality in plasmid identification"
@@ -165,7 +165,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.seq_padding"
+            v-model="config.seqPadding"
             min=1
             max=10000
             type="number"
@@ -178,7 +178,7 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.cov_window"
+            v-model="config.covWindow"
             min=20
             max=5000
             hint="Window size for coverage calculation"
@@ -188,7 +188,7 @@
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.cov_window"
+            v-model="config.covWindow"
             min=20
             max=5000
             type="number"
@@ -199,7 +199,7 @@
       <v-layout>
         <v-flex xs6>
           <v-slider
-                  v-model="config.mapping_cov"
+                  v-model="config.mappingCov"
                   min=2000
                   max=1000000
                   hint="Target average mean coverage"
@@ -209,7 +209,7 @@
         </v-flex>
         <v-flex xs2 ml-5>
           <v-text-field
-                  v-model="config.mapping_cov"
+                  v-model="config.mappingCov"
                   min=2000
                   max=1000000
                   type="number"
@@ -220,7 +220,7 @@
       <v-layout>
         <v-flex xs6>
           <v-slider
-                  v-model="config.min_length"
+                  v-model="config.minContigLength"
                   min=2000
                   max=1000000
                   hint="Minimum contig length considered plasmid search"
@@ -230,7 +230,7 @@
         </v-flex>
         <v-flex xs2 ml-5>
           <v-text-field
-                  v-model="config.min_length"
+                  v-model="config.minContigLength"
                   min=2000
                   max=1000000
                   type="number"
@@ -241,7 +241,7 @@
       <v-layout>
         <v-flex xs6>
           <v-slider
-                  v-model="config.max_length"
+                  v-model="config.maxLength"
                   min=2000
                   max=1000000
                   hint="Maximum contig length considered plasmid search"
@@ -251,7 +251,7 @@
         </v-flex>
         <v-flex xs2 ml-5>
           <v-text-field
-                  v-model="config.max_length"
+                  v-model="config.maxLength"
                   min=2000
                   max=1000000
                   type="number"
@@ -366,16 +366,16 @@ export default {
       submissionFailed: false,
       submissionError: "",
       config: {
-        min_contig_length: 2000,
-        target_shortread_cov: 150,
-        target_longread_cov: 150,
-        genome_size: 5300000,
+        minContigLength: 2000,
+        targetShortReadCov: 150,
+        targetLongReadCov: 150,
+        genomeSize: 5300000,
         mode: "unicycler",
-        seq_padding: 1000,
-        cov_window: 50,
-        mapping_cov: 5000,
-        min_length: 5000,
-        max_length: 500000
+        seqPadding: 1000,
+        covWindow: 50,
+        mappingCov: 5000,
+        minLength: 5000,
+        maxLength: 500000
       },
       samples: [
 
