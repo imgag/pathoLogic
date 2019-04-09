@@ -3,6 +3,7 @@
 import os
 import json
 import pickle
+import shutil
 
 import connexion
 from flask_cors import CORS
@@ -40,9 +41,9 @@ def main():
         db = get_db()
         db['status_hybridassembly'][runid] = req_data
         #print(json.dumps(db['status_assembly'][runid]))
-        if req_data['event'] == 'process_completed':
-            for sID in db['runs'][runid]:
-                db['samples'][sID]['status'] = 'finished'
+        #if req_data['event'] == 'process_completed':
+        #    for sID in db['runs'][runid]:
+        #        db['samples'][sID]['status'] = 'finished_ha'
         return 'NF Request received'
 
     # Create route for nextflow weblog (plasmident)
@@ -52,13 +53,50 @@ def main():
         db = get_db()
         db['status_plasmident'][runid] = req_data
         #print(json.dumps(db['status_plasmident'][runid]))
-        if req_data['event'] == 'process_completed':
+
+
+        if req_data['event'] == 'error':
+            print(json.dumps(db['status_plasmident'][runid]))
             for sID in db['runs'][runid]:
-                db['samples'][sID]['status'] = 'finished'
+                db['samples'][sID]['status'] = 'error'
+                print(sID)
+            print("Set all to error")
+
+        if req_data['event'] == 'completed':
+            print(json.dumps(db['status_plasmident'][runid]))
+            
+            all_ok = True
+            for sID in db['runs'][runid]:
+                # Check if there was an error before
+                if db['samples'][sID]['status'] == 'error':
+                    all_ok = False
+
+                else:
+                    db['samples'][sID]['status'] = 'finished'
+                    print("Successfully finished " + sID)
+
+            if all_ok:
+                # Zip output folders
+                runpath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'runs', runid)
+                zip_path = os.path.join(runpath, (runid[0:7] + 'pathoLogic_results'))
+                stats_file = os.path.join(runpath, (runid[0:7] + 'results.json'))
+                shutil.make_archive(zip_path, 'zip', os.path.join(runpath, 'out'))
+
+                print(runpath)
+                print(zip_path)
+                print(stats_file)
+
+                # Save zip location in db
+                for sID in db['runs'][runid]:
+                    db['samples'][sID]['zip'] = zip_path+'.zip'
+                    db['samples'][sID]['assembly_stats'] = stats_file
+
+        
         return 'NF Request received'
 
     production = os.getenv('PRODUCTION', False)
     app.run(port=os.getenv('HTTP_PORT', 8080), debug=not production, use_debugger=not production, use_reloader=not production, passthrough_errors=not production)
+
 
 if __name__ == '__main__':
     main()
