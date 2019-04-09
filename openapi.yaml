@@ -271,7 +271,7 @@ components:
           format: int64
           minimum: 2000
           maximum: 1000000
-          description: Minimum contig length considered plasmid search
+          description: Target average mean coverage
           default: 5000
     Sample:
       type: object

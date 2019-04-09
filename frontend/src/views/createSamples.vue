@@ -63,52 +63,6 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.cpu"
-            min=1
-            max=40
-            hint="Number of threads per process"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-        <v-flex xs2 ml-5>      
-          <v-text-field
-            v-model="config.cpu"
-            min=1
-            max=40
-            type="number"
-            class="mt-0"
-          />
-        </v-flex>
-      </v-layout>
-      <v-layout
-        row
-      >
-        <v-flex xs6>      
-          <v-slider
-            v-model="config.queue_size"
-            min=1
-            max=20
-            hint="Number of concurrent processes"
-            :persistent-hint="true"
-            :thumb-label="true"
-          />
-        </v-flex>
-        <v-flex xs2 ml-5>      
-          <v-text-field
-            v-model="config.queue_size"
-            min=1
-            max=20
-            type="number"
-            class="mt-0"
-          />
-        </v-flex>
-      </v-layout>
-      <v-layout
-        row
-      >
-        <v-flex xs6>      
-          <v-slider
             v-model="config.min_contig_length"
             min=1
             max=1000000
@@ -178,17 +132,17 @@
       >
         <v-flex xs6>      
           <v-slider
-            v-model="config.est_genome_size"
+            v-model="config.genome_size"
             min=1
             max=10000000
-            hint="Estimated genome size after assembly"
+            hint="Estimated approximate final genome size of assembled bacteria. Used for coverage calculations"
             :persistent-hint="true"
             :thumb-label="true"
           />
         </v-flex>
         <v-flex xs2 ml-5>      
           <v-text-field
-            v-model="config.est_genome_size"
+            v-model="config.genome_size"
             min=1
             max=10000000
             type="number"
@@ -204,7 +158,7 @@
             v-model="config.seq_padding"
             min=1
             max=10000
-            hint="Sequence overlap length during plasmid identification"
+            hint="Number of bases added at sequence ends to improve alignment quality in plasmid identification"
             :persistent-hint="true"
             :thumb-label="true"
           />
@@ -227,7 +181,7 @@
             v-model="config.cov_window"
             min=20
             max=5000
-            hint="Coverage window size"
+            hint="Window size for coverage calculation"
             :persistent-hint="true"
             :thumb-label="true"
           />
@@ -239,6 +193,69 @@
             max=5000
             type="number"
             class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout>
+        <v-flex xs6>
+          <v-slider
+                  v-model="config.mapping_cov"
+                  min=2000
+                  max=1000000
+                  hint="Target average mean coverage"
+                  :persistent-hint="true"
+                  :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>
+          <v-text-field
+                  v-model="config.mapping_cov"
+                  min=2000
+                  max=1000000
+                  type="number"
+                  class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout>
+        <v-flex xs6>
+          <v-slider
+                  v-model="config.min_length"
+                  min=2000
+                  max=1000000
+                  hint="Minimum contig length considered plasmid search"
+                  :persistent-hint="true"
+                  :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>
+          <v-text-field
+                  v-model="config.min_length"
+                  min=2000
+                  max=1000000
+                  type="number"
+                  class="mt-0"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout>
+        <v-flex xs6>
+          <v-slider
+                  v-model="config.max_length"
+                  min=2000
+                  max=1000000
+                  hint="Maximum contig length considered plasmid search"
+                  :persistent-hint="true"
+                  :thumb-label="true"
+          />
+        </v-flex>
+        <v-flex xs2 ml-5>
+          <v-text-field
+                  v-model="config.max_length"
+                  min=2000
+                  max=1000000
+                  type="number"
+                  class="mt-0"
           />
         </v-flex>
       </v-layout>
@@ -349,15 +366,16 @@ export default {
       submissionFailed: false,
       submissionError: "",
       config: {
-        cpu: 5,
-        queue_size: 4,
         min_contig_length: 2000,
         target_shortread_cov: 150,
         target_longread_cov: 150,
-        est_genome_size: 5300000,
+        genome_size: 5300000,
         mode: "unicycler",
         seq_padding: 1000,
-        cov_window: 50
+        cov_window: 50,
+        mapping_cov: 5000,
+        min_length: 5000,
+        max_length: 500000
       },
       samples: [
 
@@ -394,7 +412,7 @@ export default {
           config: vm.config,
           samples: samples
         })
-      }).then((response) => { // TODO: Add visual feedback
+      }).then((response) => {
         if (response.status === 200) {
           vm.$store.commit('addSamples', samples.map((sample) => sample.status = 'created'))
           vm.$router.push({name: 'samples'})
