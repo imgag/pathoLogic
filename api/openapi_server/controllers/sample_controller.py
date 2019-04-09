@@ -61,21 +61,23 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
             "nf_config.json"))
 
     # Run Hybrid assembly
-
-    status += os.system("cd " + runpath + " && " + nfexecutable + 
-             " run " + nf_hybridassembly + "  -profile app \
-             --outDir" + runpath + 
-             "--input read_locations.tsv \
-             -params-file nf_config.json -with-weblog \
-              http://localhost:8080/v1/nf_assembly/" + runid)
+    call_ha = ("cd " + runpath + " && " + nfexecutable + 
+             " run " + nf_hybridassembly + "  -profile app " +
+             " --outDir " + runpath + 
+             " --input read_locations.tsv " +
+             "-params-file nf_config.json -with-weblog" +
+             " http://localhost:8080/v1/nf_assembly/" + runid)
+    #print(call_ha)
+    status += os.system("cd " + runpath + " && " + call_ha) 
 
     # Run plasmident
-    status += os.system("cd " + runpath + " && " + nfexecutable + 
-             " run " + nf_plasmident + " -profile app \
-              --outDir" + runpath + 
-              "--input file_paths_plasmident.tsv \
-              -params-file nf_config.json -with-weblog \
-              http://localhost:8080/v1/nf_plasmident/" + runid)
+    call_pi =  (nfexecutable + " run " + nf_plasmident + " -profile app " +
+              " --outDir " + runpath + 
+              " --input file_paths_plasmident.tsv " + 
+              "-params-file nf_config.json -with-weblog "+
+              "http://localhost:8080/v1/nf_plasmident/" + runid)
+    #print(call_pi)
+    status += os.system("cd " + runpath + " && " + call_ha)  
 
     if status == 0:
         # Zip output folders
