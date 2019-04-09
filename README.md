@@ -33,10 +33,11 @@ A release version might be created in the future
 
 You can change the following environment variables to change the folder locations for run and sample folder used by pathoLogic. All `fastq` input files need to be moved to the the `samples` folder (default: pathologic/samples). 
 
-| Env variabe | Description                       | Default       |
-|-------------|-----------------------------------|---------------|
-|  BASE_DIR   | Location of run and sample folder |  $PWD         |
-|  DATA_DIR   | Location of read files            |  $PWD/samples | 
+| Env variable | Description                                | Default       |
+|--------------|--------------------------------------------|---------------|
+|  BASE_DIR    | Location of run and sample folder          |  $PWD         |
+|  DATA_DIR    | Location of read files                     |  $PWD/samples |
+|  PRODUCTION  | Wether or not the service is in production |  False        |
 
 ## 4) Install python requirements
 
@@ -48,6 +49,8 @@ python -m venv venv
 source venv/bin/activate
 pip install -f requirements.txt
 ```
+
+A more detailed explanation can be found in the [api](./api/README.md) folder.
 
 ## 5) Run install script
 
@@ -68,8 +71,8 @@ singularity pull docker://caspargross/hybridassembly
 singularity pull docker://caspargross/plasmIDent
 ```
 
+### 6) Architecture
 
-The [swagger definition](http://swagger.io/) can be found [here as well](./swagger.yaml).
-The `frontend` is written in [Vue](https://vuejs.org/), see more in the [frontend folder](./frontend/README.md).
-The `backend` is written in [flask](http://flask.pocoo.org/), see the [backend folder](./backend/README.md).
-```
+This service is written using [OpenAPI](https://www.openapis.org/). The [OpenAPI definition](./openapi.yaml) can be found in our repository.
+
+From the definition we generate a [flask](http://flask.pocoo.org) based server (see [backend](./backend/README.md)) and a [Vue](https://vuejs.org) based GUI (see [frontend](./frontend/README.md))
