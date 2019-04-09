@@ -37,6 +37,7 @@ You can change the following environment variables to change the folder location
 |--------------|--------------------------------------------|---------------|
 |  BASE_DIR    | Location of run and sample folder          |  $PWD         |
 |  DATA_DIR    | Location of read files                     |  $PWD/samples |
+|  CONDA_DIR   | Location of conda `bin/` folder            | `~./miniconda/bin/`
 |  PRODUCTION  | Wether or not the service is in production |  False        |
 
 ## 4) Install python requirements
@@ -62,7 +63,7 @@ Alternative manual installation:
 clone the following two repositories into the `pathoLogic` folder
 
 - [imgag/plasmIDent](https://github.com/imgag/plasmIDent)
-- [caspargross/hybridassembly](https://github.com/imgag/hybridassembly)
+- [caspargross/hybridassembly](https://github.com/caspargross/hybridassembly)
 
 and pull the singularity/docker images
 
