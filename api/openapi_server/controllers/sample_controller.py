@@ -67,7 +67,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
              "-params-file nf_config.json -with-weblog" +
              " http://localhost:8080/v1/nf_assembly/" + runid)
     print(call_ha)
-    status += os.system("cd " + runpath + " && " + call_ha) 
+    status += os.system("cd " + runpath + " && " + call_ha + "&") 
 
     # Run plasmident
     call_pi =  (nfexecutable + " run " + nf_plasmident + " -profile app " +
@@ -76,7 +76,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
               "-params-file nf_config.json -with-weblog "+
               "http://localhost:8080/v1/nf_plasmident/" + runid)
     print(call_pi)
-    status += os.system("cd " + runpath + " && " + call_ha)  
+    status += os.system("cd " + runpath + " && " + call_ha + "&")  
 
     if status == 0:
         # Zip output folders
@@ -87,11 +87,6 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
         for sID in samples:
             db['samples'][sID]['zip'] = zip_path+'.zip'
             db['samples'][sID]['assembly_stats'] = stats_file
-
-        # Set sample status to finished
-        for sID in samples:
-            db['samples'][sID]['status'] = 'finished'
-
     else:
         # Set sample status to errored
         for sID in samples:
