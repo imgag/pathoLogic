@@ -3,8 +3,8 @@
 
 # Install nextflow
 curl -s https://get.nextflow.io | bash 
-.nextflow pull caspargross/hybridassembly
-.nextflow pull caspargross/plasmident
+nextflow pull caspargross/hybridassembly
+nextflow pull imgag/plasmIDent
 
 # Install singularity
 singularity pull docker://caspargross/hybridassembly
