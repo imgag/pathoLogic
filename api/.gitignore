@@ -67,3 +67,7 @@ target/
 runs/
 samples/
 *.db
+hybridassembly/
+plasmIdent/
+nextflow
+
