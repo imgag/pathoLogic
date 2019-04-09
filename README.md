@@ -2,7 +2,7 @@ pathoLogic
 --------
 
 Pipeline for hybrid assembly and identification of antibiotic resistance plasnid.
-This repo contains all the files for the `pathoLogic`  pipeline and a Browser based frontend.
+This repo contains all the files for the `pathoLogic`  pipeline and a browser based frontend.
 
 ## Requirements:
 
