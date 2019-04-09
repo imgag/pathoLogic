@@ -47,7 +47,6 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
     for sID in samples:
         db['samples'][sID]['status'] = 'started'
 
-
     #Try to run all this stuff
 
     # Copy input and config files to run folder
@@ -67,7 +66,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
              " --input read_locations.tsv " +
              "-params-file nf_config.json -with-weblog" +
              " http://localhost:8080/v1/nf_assembly/" + runid)
-    #print(call_ha)
+    print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha) 
 
     # Run plasmident
@@ -76,7 +75,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
               " --input file_paths_plasmident.tsv " + 
               "-params-file nf_config.json -with-weblog "+
               "http://localhost:8080/v1/nf_plasmident/" + runid)
-    #print(call_pi)
+    print(call_pi)
     status += os.system("cd " + runpath + " && " + call_ha)  
 
     if status == 0:
