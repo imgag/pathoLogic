@@ -56,7 +56,7 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
             'samples', sID, 'read_locations.tsv') for sID in samples]) +
             " >> " + os.path.join(runpath, "read_locations.tsv"))
     os.system("cp " + os.path.join(os.environ.get('BASE_DIR', os.getcwd()),
-            'samples', sample_id, "nf_config.json") + " " + os.path.join(runpath,
+            'samples', samples[0], "nf_config.json") + " " + os.path.join(runpath,
             "nf_config.json"))
 
     # Custom add the conda path (probably not needed)

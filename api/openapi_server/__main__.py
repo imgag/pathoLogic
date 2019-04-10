@@ -77,14 +77,14 @@ def main():
 
             if all_ok:
                 # Zip output folders
-                runpath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'runs', runid)
+                runpath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'runs')
                 zip_path = os.path.join(runpath, (runid[0:7] + 'pathoLogic_results'))
                 stats_file = os.path.join(runpath, (runid[0:7] + 'results.json'))
-                shutil.make_archive(zip_path, 'zip', os.path.join(runpath, 'out'))
+                shutil.make_archive(zip_path, 'zip', os.path.join(runpath, runid,'out'))
 
-                print(runpath)
-                print(zip_path)
-                print(stats_file)
+                #print(runpath)
+                #print(zip_path)
+                #print(stats_file)
 
                 # Save zip location in db
                 for sID in db['runs'][runid]:
