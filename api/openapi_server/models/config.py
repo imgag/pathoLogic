@@ -15,7 +15,7 @@ class Config(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, min_contig_length=2000, target_short_read_cov=150, target_long_read_cov=150, genome_size=5300000, mode='unicycler', seq_padding=1000, cov_window=50, max_length=500000, min_length=5000, mapping_cov=5000):  # noqa: E501
+    def __init__(self, min_contig_length=2000, target_short_read_cov=150, target_long_read_cov=150, genome_size=5300000, mode='unicycler', seq_padding=1000, cov_window=50, max_length=500000, min_length=5000, mapping_cov=50):  # noqa: E501
         """Config - a model defined in OpenAPI
 
         :param min_contig_length: The min_contig_length of this Config.  # noqa: E501
@@ -336,7 +336,7 @@ class Config(Model):
     def mapping_cov(self):
         """Gets the mapping_cov of this Config.
 
-        Minimum contig length considered plasmid search  # noqa: E501
+        Target average mean coverage  # noqa: E501
 
         :return: The mapping_cov of this Config.
         :rtype: int
@@ -347,14 +347,14 @@ class Config(Model):
     def mapping_cov(self, mapping_cov):
         """Sets the mapping_cov of this Config.
 
-        Minimum contig length considered plasmid search  # noqa: E501
+        Target average mean coverage  # noqa: E501
 
         :param mapping_cov: The mapping_cov of this Config.
         :type mapping_cov: int
         """
-        if mapping_cov is not None and mapping_cov > 1000000:  # noqa: E501
-            raise ValueError("Invalid value for `mapping_cov`, must be a value less than or equal to `1000000`")  # noqa: E501
-        if mapping_cov is not None and mapping_cov < 2000:  # noqa: E501
-            raise ValueError("Invalid value for `mapping_cov`, must be a value greater than or equal to `2000`")  # noqa: E501
+        if mapping_cov is not None and mapping_cov > 200:  # noqa: E501
+            raise ValueError("Invalid value for `mapping_cov`, must be a value less than or equal to `200`")  # noqa: E501
+        if mapping_cov is not None and mapping_cov < 20:  # noqa: E501
+            raise ValueError("Invalid value for `mapping_cov`, must be a value greater than or equal to `20`")  # noqa: E501
 
         self._mapping_cov = mapping_cov

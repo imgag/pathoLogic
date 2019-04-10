@@ -200,8 +200,8 @@
         <v-flex xs6>
           <v-slider
                   v-model="config.mappingCov"
-                  min=2000
-                  max=1000000
+                  min=20
+                  max=200
                   hint="Target average mean coverage"
                   :persistent-hint="true"
                   :thumb-label="true"
@@ -210,8 +210,8 @@
         <v-flex xs2 ml-5>
           <v-text-field
                   v-model="config.mappingCov"
-                  min=2000
-                  max=1000000
+                  min=20
+                  max=200
                   type="number"
                   class="mt-0"
           />
@@ -373,7 +373,7 @@ export default {
         mode: "unicycler",
         seqPadding: 1000,
         covWindow: 50,
-        mappingCov: 5000,
+        mappingCov: 20,
         minLength: 5000,
         maxLength: 500000
       },
