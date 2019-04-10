@@ -276,11 +276,11 @@ components:
           minimum: 2000
           type: integer
         mappingCov:
-          default: 5000
-          description: Minimum contig length considered plasmid search
+          default: 50
+          description: Target average mean coverage
           format: int64
-          maximum: 1000000
-          minimum: 2000
+          maximum: 200
+          minimum: 20
           type: integer
       required:
       - mode
