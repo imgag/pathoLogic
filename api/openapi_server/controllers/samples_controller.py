@@ -69,16 +69,15 @@ def samples_post(body=None):  # noqa: E501
                 raise BadRequest("Submitted incomplete sample {}, long run path is missing.".format(s['id']))
             paths = [join_read_path_with_data_dir(read_path) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
             outfile.write(s['id'] + '\t' + "\t".join(paths) + '\n')
-
-    # Store informations in dict db
-    db = get_db()
-    db['samples'][s['id']] = {
-        'id':s['id'],
-        'author_email':s['author_email'],
-        'created':str(datetime.utcnow()),
-        'last_updated':str(datetime.utcnow()),
-        'status':"created",
-        'zip':None
-    }
+        
+        db = get_db()
+        db['samples'][s['id']] = {
+            'id':s['id'],
+            'author_email':s['author_email'],
+            'created':str(datetime.utcnow()),
+            'last_updated':str(datetime.utcnow()),
+            'status':"created",
+            'zip':None
+        }
     
     return body['samples']
