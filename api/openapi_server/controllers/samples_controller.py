@@ -1,16 +1,13 @@
-import connexion
-import six
 import os
-import ntpath
 import json
-
 from datetime import datetime
 
-from flask import current_app, g
 from werkzeug.exceptions import BadRequest
+
 from openapi_server.models.sample import Sample  # noqa: E501
 from openapi_server.db import get_db
-from openapi_server import util
+from openapi_server.util import join_read_path_with_data_dir
+
 
 def format_sample(obj):
     """
@@ -23,11 +20,6 @@ def format_sample(obj):
         'last_updated': obj['last_updated']
     }
 
-def join_read_path_with_data_dir(read_path):
-    """
-    Joins a read path with the data directory
-    """
-    return os.path.join(os.getenv('DATA_DIR', os.getcwd()), ntpath.basename(read_path))
 
 def samples_get():  # noqa: E501
     """List all samples
@@ -41,12 +33,13 @@ def samples_get():  # noqa: E501
     db = get_db()
     return [format_sample(db['samples'][sample]) for sample in db['samples'].keys()]
 
+
 def samples_post(body=None):  # noqa: E501
     """Create new samples
 
      # noqa: E501
 
-    :param body: 
+    :param body:
     :type body: dict | bytes
 
     :rtype: Sample
@@ -69,7 +62,7 @@ def samples_post(body=None):  # noqa: E501
                 raise BadRequest("Submitted incomplete sample {}, long run path is missing.".format(s['id']))
             paths = [join_read_path_with_data_dir(read_path) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
             outfile.write(s['id'] + '\t' + "\t".join(paths) + '\n')
-        
+
         db = get_db()
         db['samples'][s['id']] = {
             'id':s['id'],
@@ -79,5 +72,5 @@ def samples_post(body=None):  # noqa: E501
             'status':"created",
             'zip':None
         }
-    
+
     return body['samples']

@@ -18,6 +18,33 @@ tags:
   - name: files
     description: File related stuff
 paths:
+  /upload: 
+    post: 
+      description: "Uploads a file to the server"
+      requestBody: 
+        content: 
+          multipart/form-data: 
+            schema: 
+              properties: 
+                uploadedFile: 
+                  description: "The file to upload."
+                  format: binary
+                  type: string
+              type: object
+      responses: 
+        ? "200"
+        : 
+          description: successfull
+        ? "400"
+        : 
+          content: 
+            ? "*/*"
+            : 
+              schema: 
+                type: string
+          description: "failed, e.g file can not be uploaded"
+      tags: 
+        - files
   "/download/{filePath}":
     get:
       tags:
@@ -300,3 +327,4 @@ components:
           type: string
 security:
   - jwt: ['secret']
+

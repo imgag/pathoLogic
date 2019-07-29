@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add controller to upload files
 - Added login to frontend using fetchDefaults and oauth2-client-js
 - Add JWT based authentication schema
 - Add JWT implementation and requirements

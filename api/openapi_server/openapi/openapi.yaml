@@ -94,7 +94,7 @@ paths:
     post:
       operationId: samples_post
       requestBody:
-        $ref: '#/components/requestBodies/inline_object'
+        $ref: '#/components/requestBodies/inline_object_1'
         content:
           application/json:
             schema:
@@ -182,11 +182,43 @@ paths:
       tags:
       - status
       x-openapi-router-controller: openapi_server.controllers.status_controller
+  /upload:
+    post:
+      description: Uploads a file to the server
+      operationId: upload_post
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                uploadedFile:
+                  description: The file to upload.
+                  format: binary
+                  type: string
+              type: object
+      responses:
+        200:
+          description: successfull
+        400:
+          content:
+            '*/*':
+              schema:
+                type: string
+          description: failed, e.g file can not be uploaded
+      tags:
+      - files
+      x-openapi-router-controller: openapi_server.controllers.files_controller
 components:
   requestBodies:
-    inline_object:
+    inline_object_1:
       content:
         application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+    inline_object:
+      content:
+        multipart/form-data:
           schema:
             $ref: '#/components/schemas/inline_object'
   schemas:
@@ -316,6 +348,13 @@ components:
         path_sr2:
           type: string
       type: object
+    inline_object:
+      properties:
+        uploadedFile:
+          description: The file to upload.
+          format: binary
+          type: string
+      type: object
     inline_response_200:
       example:
         id: id
@@ -340,7 +379,7 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/Sample'
-    inline_object:
+    inline_object_1:
       properties:
         config:
           $ref: '#/components/schemas/Config'
