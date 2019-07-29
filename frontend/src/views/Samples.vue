@@ -115,7 +115,7 @@ export default {
     startSamples () {
       let vm = this
 
-      fetch(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
+      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
         method: 'PUT'
       }).then((response) => {
         let status = ""
@@ -134,9 +134,9 @@ export default {
   },
   mounted () {
     let vm = this
-      fetch(`${vm.$basePath}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
+      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples`).then((response) => response.json()).then((projects) => { // fetch projects
         return Promise.resolve(vm.$store.commit('addSamples', projects))
-      }).then(() => fetch(`${vm.$basePath}/status`)).then((response) => response.json()).then((result) => { // fetch status
+      }).then(() => vm.$store.getters.fetch_defaults(`${vm.$basePath}/status`)).then((response) => response.json()).then((result) => { // fetch status
         result.forEach((status) => {
           vm.$store.commit('addStatus', status)
         })

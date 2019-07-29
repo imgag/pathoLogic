@@ -22,7 +22,7 @@ export default {
     },
     mounted () {
         let vm = this
-        fetch(`${vm.$basePath}/result/${vm.$route.params.id}`)
+        vm.$store.getters.fetch_defaults(`${vm.$basePath}/result/${vm.$route.params.id}`)
             .then((result) => Promise.resolve(result.json()))
             .then((content) => {
                 vm.zip_url = `${vm.$basePath}/download/${content.result.zip_path}`

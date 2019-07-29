@@ -1,15 +1,15 @@
 <template>
   <v-layout
-    justify-center 
+    justify-center
     align-start
   >
     <error-modal :active="submissionFailed" @close="submissionFailed = false" :errorMessage="submissionError" v-if="submissionError.length"></error-modal>
     <error-modal :active="submissionFailed" @close="submissionFailed = false" v-else></error-modal>
     <v-form v-model="valid_config">
       <v-flex>
-      <h2>Configuration</h2>    
+      <h2>Configuration</h2>
       </v-flex>
-      <v-layout 
+      <v-layout
           ma-3
           column>
         <v-flex
@@ -50,18 +50,18 @@
         </v-flex>
       </v-layout>
       <v-divider></v-divider>
-      <v-layout 
+      <v-layout
           v-if="advanced_options"
           ma-3
-          column 
-      > 
+          column
+      >
       <v-flex >
-      <h3>Advanced options</h3>    
+      <h3>Advanced options</h3>
       </v-flex>
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.minContigLength"
             min=1
@@ -71,7 +71,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.minContigLength"
             min=1
@@ -84,7 +84,7 @@
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.targetShortReadCov"
             min=1
@@ -94,7 +94,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.targetShortReadCov"
             min=1
@@ -107,7 +107,7 @@
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.targetLongReadCov"
             min=1
@@ -117,7 +117,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.targetLongReadCov"
             min=1
@@ -130,7 +130,7 @@
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.genomeSize"
             min=1
@@ -140,7 +140,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.genomeSize"
             min=1
@@ -153,7 +153,7 @@
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.seqPadding"
             min=1
@@ -163,7 +163,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.seqPadding"
             min=1
@@ -176,7 +176,7 @@
       <v-layout
         row
       >
-        <v-flex xs6>      
+        <v-flex xs6>
           <v-slider
             v-model="config.covWindow"
             min=20
@@ -186,7 +186,7 @@
             :thumb-label="true"
           />
         </v-flex>
-        <v-flex xs2 ml-5>      
+        <v-flex xs2 ml-5>
           <v-text-field
             v-model="config.covWindow"
             min=20
@@ -259,14 +259,14 @@
           />
         </v-flex>
       </v-layout>
-    </v-layout>  
+    </v-layout>
       <v-layout>
         <v-flex
           xs12
           mt-2
           mb-2
         >
-          <h2>Samples</h2>    
+          <h2>Samples</h2>
         </v-flex>
       </v-layout>
 
@@ -403,7 +403,7 @@ export default {
         }
       })
 
-      fetch(`${vm.$basePath}/samples`, {
+      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",
