@@ -38,6 +38,8 @@ You can change the following environment variables to change the folder location
 |  BASE_DIR    | Location of run and sample folder          |  $PWD         |
 |  DATA_DIR    | Location of read files                     |  $PWD/samples |
 |  PRODUCTION  | Wether or not the service is in production |  False        |
+|  AUTH_DOMAIN | Which domain to use for authentication     | auth.imgag.de |
+|  AUTH_REALM  | Which realm to use for authentication      | debug         |
 
 ## 4) Install python requirements
 

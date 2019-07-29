@@ -177,6 +177,11 @@ externalDocs:
 servers:
   - url: /v1
 components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Status:
       type: string
