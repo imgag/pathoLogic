@@ -14,7 +14,6 @@
         <router-link :to="{ name: 'result', params: { id: props.item.id } }">{{ props.item.id }}</router-link>
       </td>
       <td v-else>{{ props.item.id }}</td>
-      <td>{{ props.item.author_email }}</td>
       <td>{{ props.item.created }}</td>
       <td>{{ props.item.last_updated }}</td>
       <td><status :status="props.item.status"></status></td>
@@ -64,12 +63,6 @@ export default {
           align: 'left',
           sortable: true,
           value: 'id'
-        },
-        {
-          text: 'Author email',
-          align: 'left',
-          sortable: true,
-          value: 'author_email'
         },
         {
           text: 'Created',

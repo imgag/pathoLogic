@@ -13,20 +13,6 @@
           ma-3
           column>
         <v-flex
-          xs-10
-        >
-          <v-text-field
-            v-model="author_email"
-            hint="The author email of the samples"
-            value="author@med.uni-tuebingen.de"
-            :rules="emailRules"
-            required
-            persistent-hint
-            solo
-          ></v-text-field>
-        </v-flex>
-
-        <v-flex
           xs2
         >
           <v-select
@@ -362,7 +348,6 @@ export default {
       ],
       advanced_options: false,
       valid_config: false,
-      author_email: "",
       submissionFailed: false,
       submissionError: "",
       config: {
@@ -397,7 +382,6 @@ export default {
       let samples = vm.samples.map((sample) => {
         return {
           ...sample,
-          author_email: vm.author_email,
           created: new Date().toISOString(),
           last_updated: new Date().toISOString()
         }

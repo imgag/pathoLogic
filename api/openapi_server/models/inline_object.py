@@ -22,7 +22,7 @@ class InlineObject(Model):
         :type uploaded_file: file
         """
         self.openapi_types = {
-            'uploaded_file': uploaded_file
+            'uploaded_file': file
         }
 
         self.attribute_map = {

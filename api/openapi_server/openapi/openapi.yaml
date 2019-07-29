@@ -327,13 +327,9 @@ components:
         last_updated: 2000-01-23
         path_lr: path_lr
         created: 2000-01-23
-        author_email: author_email
         id: id
       properties:
         id:
-          type: string
-        author_email:
-          format: email
           type: string
         created:
           format: date
@@ -372,7 +368,6 @@ components:
           last_updated: 2000-01-23
           path_lr: path_lr
           created: 2000-01-23
-          author_email: author_email
           id: id
       properties:
         id:

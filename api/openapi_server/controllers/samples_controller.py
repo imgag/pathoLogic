@@ -15,7 +15,6 @@ def format_sample(obj):
     """
     return {
         'id': obj['id'],
-        'author_email': obj['author_email'],
         'created': obj['created'],
         'last_updated': obj['last_updated']
     }
@@ -69,8 +68,7 @@ def samples_post(user, body=None):  # noqa: E501
         db = get_db()
         db['samples'][s['id']] = {
             'user_id': user,
-            'id':s['id'],
-            'author_email':s['author_email'],
+            'id': s['id'],
             'created': str(datetime.utcnow()),
             'last_updated': str(datetime.utcnow()),
             'status': "created",

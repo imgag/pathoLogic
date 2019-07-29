@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enforce JWT on API side
 - Only return results by user ID
 
+### Removed
+- Remove author_email field as it is redundant and slows down the user
+
 ## [0.1.2] - 2019-04-15
 ### Added
 

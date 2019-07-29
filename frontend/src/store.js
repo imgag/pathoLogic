@@ -55,9 +55,6 @@ export default new Vuex.Store({
     },
     sample_ids (state) {
       return state.samples.map((s) => s.id)
-    },
-    author_emails (state) {
-      return new Set(state.samples.map((s) => s.author_email))
     }
   },
   mutations: {

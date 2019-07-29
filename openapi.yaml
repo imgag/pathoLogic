@@ -18,32 +18,32 @@ tags:
   - name: files
     description: File related stuff
 paths:
-  /upload: 
-    post: 
+  /upload:
+    post:
       description: "Uploads a file to the server"
-      requestBody: 
-        content: 
-          multipart/form-data: 
-            schema: 
-              properties: 
-                uploadedFile: 
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                uploadedFile:
                   description: "The file to upload."
                   format: binary
                   type: string
               type: object
-      responses: 
+      responses:
         ? "200"
-        : 
+        :
           description: successfull
         ? "400"
-        : 
-          content: 
+        :
+          content:
             ? "*/*"
-            : 
-              schema: 
+            :
+              schema:
                 type: string
           description: "failed, e.g file can not be uploaded"
-      tags: 
+      tags:
         - files
   "/download/{filePath}":
     get:
@@ -310,9 +310,6 @@ components:
       properties:
         id:
           type: string
-        author_email:
-          type: string
-          format: email
         created:
           type: string
           format: date

@@ -15,13 +15,11 @@ class Sample(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, id=None, author_email=None, created=None, last_updated=None, path_lr=None, path_sr1=None, path_sr2=None):  # noqa: E501
+    def __init__(self, id=None, created=None, last_updated=None, path_lr=None, path_sr1=None, path_sr2=None):  # noqa: E501
         """Sample - a model defined in OpenAPI
 
         :param id: The id of this Sample.  # noqa: E501
         :type id: str
-        :param author_email: The author_email of this Sample.  # noqa: E501
-        :type author_email: str
         :param created: The created of this Sample.  # noqa: E501
         :type created: date
         :param last_updated: The last_updated of this Sample.  # noqa: E501
@@ -35,7 +33,6 @@ class Sample(Model):
         """
         self.openapi_types = {
             'id': str,
-            'author_email': str,
             'created': date,
             'last_updated': date,
             'path_lr': str,
@@ -45,7 +42,6 @@ class Sample(Model):
 
         self.attribute_map = {
             'id': 'id',
-            'author_email': 'author_email',
             'created': 'created',
             'last_updated': 'last_updated',
             'path_lr': 'path_lr',
@@ -54,7 +50,6 @@ class Sample(Model):
         }
 
         self._id = id
-        self._author_email = author_email
         self._created = created
         self._last_updated = last_updated
         self._path_lr = path_lr
@@ -92,27 +87,6 @@ class Sample(Model):
         """
 
         self._id = id
-
-    @property
-    def author_email(self):
-        """Gets the author_email of this Sample.
-
-
-        :return: The author_email of this Sample.
-        :rtype: str
-        """
-        return self._author_email
-
-    @author_email.setter
-    def author_email(self, author_email):
-        """Sets the author_email of this Sample.
-
-
-        :param author_email: The author_email of this Sample.
-        :type author_email: str
-        """
-
-        self._author_email = author_email
 
     @property
     def created(self):
