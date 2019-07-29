@@ -298,4 +298,5 @@ components:
           type: string
         path_sr2:
           type: string
-
+security:
+  - jwt: ['secret']

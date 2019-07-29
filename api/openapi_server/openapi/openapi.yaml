@@ -13,6 +13,9 @@ externalDocs:
   url: http://github.com/imgag/pathoLogic
 servers:
 - url: /v1
+security:
+- jwt:
+  - secret
 tags:
 - description: Sample information
   name: sample
@@ -357,3 +360,9 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/Result'
+  securitySchemes:
+    jwt:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+      x-bearerInfoFunc: openapi_server.controllers.security_controller_.info_from_jwt
