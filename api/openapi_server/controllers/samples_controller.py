@@ -21,7 +21,7 @@ def format_sample(obj):
     }
 
 
-def samples_get():  # noqa: E501
+def samples_get(user):  # noqa: E501
     """List all samples
 
      # noqa: E501
@@ -31,10 +31,13 @@ def samples_get():  # noqa: E501
     """
 
     db = get_db()
-    return [format_sample(db['samples'][sample]) for sample in db['samples'].keys()]
+    # filter samples without user id
+    samples = [sample for sample in db['samples'].keys() if 'user_id' in db['samples'][sample]]
+    return [format_sample(db['samples'][sample]) for sample in samples
+            if db['samples'][sample]['user_id'] == user]
 
 
-def samples_post(body=None):  # noqa: E501
+def samples_post(user, body=None):  # noqa: E501
     """Create new samples
 
      # noqa: E501
@@ -65,12 +68,13 @@ def samples_post(body=None):  # noqa: E501
 
         db = get_db()
         db['samples'][s['id']] = {
+            'user_id': user,
             'id':s['id'],
             'author_email':s['author_email'],
-            'created':str(datetime.utcnow()),
-            'last_updated':str(datetime.utcnow()),
-            'status':"created",
-            'zip':None
+            'created': str(datetime.utcnow()),
+            'last_updated': str(datetime.utcnow()),
+            'status': "created",
+            'zip': None
         }
 
     return body['samples']

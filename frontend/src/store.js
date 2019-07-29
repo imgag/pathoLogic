@@ -45,7 +45,7 @@ export default new Vuex.Store({
   getters: {
     fetch_defaults(state) {
       return fetchDefaults(fetch, {
-        headers: {Authorization: state.access_token}
+        headers: {Authorization: `Bearer ${state.access_token}`}
       })
     },
     samples (state) {
