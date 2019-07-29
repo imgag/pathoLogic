@@ -26,7 +26,7 @@ class InlineObject(Model):
         }
 
         self.attribute_map = {
-            'uploaded_file': 'uploadedFile'
+            'uploaded_file': 'uploaded_file'
         }
 
         self._uploaded_file = uploaded_file

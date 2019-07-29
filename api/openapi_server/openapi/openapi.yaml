@@ -192,7 +192,7 @@ paths:
           multipart/form-data:
             schema:
               properties:
-                uploadedFile:
+                uploaded_file:
                   description: The file to upload.
                   format: binary
                   type: string
@@ -346,7 +346,7 @@ components:
       type: object
     inline_object:
       properties:
-        uploadedFile:
+        uploaded_file:
           description: The file to upload.
           format: binary
           type: string

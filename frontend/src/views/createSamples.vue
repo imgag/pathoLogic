@@ -256,8 +256,13 @@
         </v-flex>
       </v-layout>
 
-      <v-layout>
+      <v-layout mb-2>
+        <v-flex xs-12>
+          <div class="dashboard"></div>
+        </v-flex>
+      </v-layout>
 
+      <v-layout>
         <v-flex
           xs-1
           mr-1
@@ -302,7 +307,13 @@
 </template>
 
 <script>
+const Uppy = require('@uppy/core')
+const XHRUpload = require('@uppy/xhr-upload')
+const Dashboard = require('@uppy/dashboard')
 import ErrorModal from '@/components/ErrorModal'
+
+require('@uppy/core/dist/style.css')
+require('@uppy/dashboard/dist/style.css')
 
 export default {
   name: 'createSample',
@@ -366,6 +377,29 @@ export default {
 
       ]
     }
+  },
+  mounted () {
+    const uppy = new Uppy({
+      debug: true,
+      autoProceed: true,
+      restrictions: {
+        allowedFileTypes: ['.tar', '.zip', '.gz', '.vcf']
+      }
+    })
+    uppy.use(Dashboard, {
+      target: '.dashboard',
+      trigger: '.UppyModalOpenerBtn',
+      inline: true,
+      height: 250
+    })
+    uppy.use(XHRUpload, {
+      endpoint: 'http://localhost:8080/v1/upload',
+      formData: true,
+      fieldName: 'uploaded_file',
+      headers: {
+        'authorization': `Bearer ${this.$store.state.access_token}`
+      }
+    })
   },
   methods: {
     duplicate_samples() {

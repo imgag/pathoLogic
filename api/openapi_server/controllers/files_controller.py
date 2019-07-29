@@ -1,9 +1,7 @@
 import os
 
-from flask import send_from_directory
+from flask import send_from_directory, jsonify
 from werkzeug.utils import secure_filename
-
-from openapi_server.util import join_read_path_with_data_dir
 
 ALLOWED_EXTENSIONS = ['tar', 'zip', 'gz', 'vcf']
 
@@ -21,7 +19,7 @@ def download_file_path_get(file_path):  # noqa: E501
     return send_from_directory(os.path.join(os.getenv('BASE_DIR', os.getcwd()), 'runs'), file_path)
 
 
-def upload_post(uploadedFile=None, user=None):  # noqa: E501
+def upload_post(uploaded_file=None, user=None):  # noqa: E501
     """upload_post
     Uploads a file to the server # noqa: E501
     :param uploadedFile: The GSVar file to upload.
@@ -30,11 +28,11 @@ def upload_post(uploadedFile=None, user=None):  # noqa: E501
     :type user: str.
     :rtype: None
     """
-    file_name = secure_filename(uploadedFile.filename)
+    file_name = secure_filename(uploaded_file.filename)
     if not any(map(lambda extension: file_name.endswith(extension), ALLOWED_EXTENSIONS)):
         return "File must be one of allowed types.", 400
     abs_folder_path = os.path.join(
-        join_read_path_with_data_dir(),
+        os.getenv('DATA_DIR', os.getcwd()),
         user
     )
     abs_file_path = os.path.join(
@@ -44,6 +42,8 @@ def upload_post(uploadedFile=None, user=None):  # noqa: E501
     if not os.path.exists(abs_folder_path):
         os.mkdir(abs_folder_path)
     # this will raise a IOError if something goes wrong
-    uploadedFile.save(abs_file_path)
+    uploaded_file.save(abs_file_path)
 
-    return file_name
+    return jsonify({
+        'url': file_name
+    })
