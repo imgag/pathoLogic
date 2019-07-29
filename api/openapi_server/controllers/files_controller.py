@@ -46,4 +46,4 @@ def upload_post(uploadedFile=None, user=None):  # noqa: E501
     # this will raise a IOError if something goes wrong
     uploadedFile.save(abs_file_path)
 
-    return "successfull"
+    return file_name

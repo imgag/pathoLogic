@@ -1,5 +1,3 @@
-import connexion
-import six
 import uuid
 import os
 import shutil
@@ -7,14 +5,14 @@ import shutil
 from werkzeug.exceptions import BadRequest
 from openapi_server.db import get_db
 from openapi_server.models.inline_response200 import InlineResponse200  # noqa: E501
-from openapi_server.models.inline_response2002 import InlineResponse2002  # noqa: E501
+
 
 def samples_sample_id_start_put(sample_id):  # noqa: E501
     """Starts one or multiple sample via ID
 
      # noqa: E501
 
-    :param sample_id: 
+    :param sample_id:
     :type sample_id: List[str]
 
     :rtype: InlineResponse200
@@ -32,10 +30,6 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
     nfexecutable = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'nextflow')
     nf_hybridassembly = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'hybridassembly', 'main.nf')
     nf_plasmident = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'plasmIDent', 'main.nf')
-    
-    #print(nfexecutable)
-    #print(nf_hybridassembly)
-    #print(nf_plasmident)
 
     # Get current database
     db = get_db()
@@ -60,23 +54,23 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
             "nf_config.json"))
 
     # Run Hybrid assembly
-    call_ha = ("cd " + runpath + " && " + nfexecutable + 
+    call_ha = ("cd " + runpath + " && " + nfexecutable +
              " run " + nf_hybridassembly + "  -profile app " +
-             " --outDir " + runpath + 
+             " --outDir " + runpath +
              " --input read_locations.tsv " +
              "-params-file nf_config.json -with-weblog" +
              " http://localhost:8080/v1/nf_assembly/" + runid)
     print(call_ha)
-    status += os.system("cd " + runpath + " && " + call_ha + "&") 
+    status += os.system("cd " + runpath + " && " + call_ha + "&")
 
     # Run plasmident
     call_pi =  (nfexecutable + " run " + nf_plasmident + " -profile app " +
-              " --outDir " + runpath + 
-              " --input file_paths_plasmident.tsv " + 
+              " --outDir " + runpath +
+              " --input file_paths_plasmident.tsv " +
               "-params-file nf_config.json -with-weblog "+
               "http://localhost:8080/v1/nf_plasmident/" + runid)
     print(call_pi)
-    status += os.system("cd " + runpath + " && " + call_ha + "&")  
+    status += os.system("cd " + runpath + " && " + call_ha + "&")
 
     if status == 0:
         # Zip output folders
