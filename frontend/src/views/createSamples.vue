@@ -288,17 +288,26 @@
                 @change="props.item.id = $event"
             ></v-text-field>
         </td>
-        <td class="text-xs-left">
-          <input type="file" :value="props.item.path_lr" @change="props.item.path_lr = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_lr"/>
-          <input type="file" @change="props.item.path_lr = $event.srcElement.value" accept=".fastq,.gz" v-else/>
+        <td>
+          <v-select
+              clearable
+              v-model="props.item.path_lr"
+              :items="available_files"
+          ></v-select>
         </td>
-        <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr1" @change="props.item.path_sr1 = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_sr1"/>
-          <input type="file" @change="props.item.path_sr1 = $event.srcElement.value" accept=".fastq,.gz" v-else/>
+        <td>
+          <v-select
+              clearable
+              v-model="props.item.path_sr1"
+              :items="available_files"
+          ></v-select>
         </td>
-        <td class="text-xs-left">
-          <input type="file" :value="props.item.path_sr2" @change="props.item.path_sr2 = $event.srcElement.value" accept=".fastq,.gz" v-if="props.item.path_sr2"/>
-          <input type="file" @change="props.item.path_sr2 = $event.srcElement.value" accept=".fastq,.gz" v-else/>
+        <td>
+          <v-select
+              clearable
+              v-model="props.item.path_sr2"
+              :items="available_files"
+          ></v-select>
         </td>
       </template>
       </v-data-table>
@@ -322,6 +331,7 @@ export default {
   },
   data () {
     return {
+      available_files: [],
       headers: [
         {
           text: 'Sample ID',
@@ -344,10 +354,6 @@ export default {
           sortable: false,
           value: 'path_sr2'
         }
-      ],
-      emailRules: [
-        v => !!v || 'E-mail is required',
-        v => /.+@.+/.test(v) || 'E-mail must be valid'
       ],
       modes: [
         "all",
@@ -379,6 +385,7 @@ export default {
     }
   },
   mounted () {
+    let vm = this
     const uppy = new Uppy({
       debug: true,
       autoProceed: true,
@@ -400,6 +407,11 @@ export default {
         'authorization': `Bearer ${this.$store.state.access_token}`
       }
     })
+    uppy.on('complete', result => {
+      if (result.successful.length) {
+        vm.available_files.push(result.successful.map((s) => s.name))
+      }
+    })
   },
   methods: {
     duplicate_samples() {
@@ -414,11 +426,19 @@ export default {
     saveSamples () {
       let vm = this
       let samples = vm.samples.map((sample) => {
-        return {
+        sample = {
           ...sample,
+          path_lr: sample.path_lr[0],
           created: new Date().toISOString(),
           last_updated: new Date().toISOString()
         }
+        if (sample.path_sr1 !== undefined) {
+          sample.path_sr1 = sample.path_sr1[0]
+        }
+        if (sample.path_sr2 !== undefined) {
+          sample.path_sr2 = sample.path_sr2[0]
+        }
+        return sample
       })
 
       vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples`, {
