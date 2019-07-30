@@ -68,7 +68,7 @@ paths:
             '*/*':
               schema:
                 items:
-                  $ref: '#/components/schemas/inline_response_200_2'
+                  $ref: '#/components/schemas/inline_response_200_1'
                 type: array
           description: successful
       summary: Lists results for given sample
@@ -154,31 +154,6 @@ paths:
                 type: array
           description: successful
       summary: Get list of all sample statuses
-      tags:
-      - status
-      x-openapi-router-controller: openapi_server.controllers.status_controller
-  /status/{sampleID}:
-    get:
-      operationId: status_sample_idget
-      parameters:
-      - description: Comma seperated list of results to return
-        explode: false
-        in: path
-        name: sampleID
-        required: true
-        schema:
-          type: string
-        style: simple
-      responses:
-        200:
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/inline_response_200_1'
-          description: successful
-        404:
-          description: Sample(s) not found
-      summary: Get status for one or more samples
       tags:
       - status
       x-openapi-router-controller: openapi_server.controllers.status_controller
@@ -359,21 +334,6 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/Status'
-    inline_response_200_1:
-      example:
-        id: id
-        status:
-          path_sr1: path_sr1
-          path_sr2: path_sr2
-          last_updated: 2000-01-23
-          path_lr: path_lr
-          created: 2000-01-23
-          id: id
-      properties:
-        id:
-          type: string
-        status:
-          $ref: '#/components/schemas/Sample'
     inline_object_1:
       properties:
         config:
@@ -383,7 +343,7 @@ components:
             $ref: '#/components/schemas/Sample'
           type: array
       type: object
-    inline_response_200_2:
+    inline_response_200_1:
       example:
         id: id
         status:

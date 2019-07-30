@@ -84,32 +84,6 @@ paths:
                       type: string
                     status:
                       $ref: "#/components/schemas/Status"
-  "/status/{sampleID}":
-    get:
-      tags:
-        - status
-      summary: Get status for one or more samples
-      parameters:
-        - name: sampleID
-          in: path
-          description: Comma seperated list of results to return
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: successful
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  status:
-                    $ref: "#/components/schemas/Sample"
-        "404":
-          description: Sample(s) not found
   /samples:
     get:
       tags:
