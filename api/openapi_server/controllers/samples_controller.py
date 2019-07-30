@@ -62,7 +62,7 @@ def samples_post(user, body=None):  # noqa: E501
         with open(os.path.join(samplepath, s['id'], "read_locations.tsv"), 'w') as outfile:
             if not "path_lr" in s:
                 raise BadRequest("Submitted incomplete sample {}, long run path is missing.".format(s['id']))
-            paths = [join_read_path_with_data_dir(read_path) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
+            paths = [join_read_path_with_data_dir(read_path, user) for read_path in [s['path_lr'], s.get('path_sr1', ""), s.get('path_sr2', "")] if len(read_path)]
             outfile.write(s['id'] + '\t' + "\t".join(paths) + '\n')
 
         db = get_db()

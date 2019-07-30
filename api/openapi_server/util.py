@@ -6,11 +6,11 @@ import six
 import typing
 
 
-def join_read_path_with_data_dir(read_path):
+def join_read_path_with_data_dir(read_path, user):
     """
     Joins a read path with the data directory
     """
-    return os.path.join(os.getenv('DATA_DIR', os.getcwd()), ntpath.basename(read_path))
+    return os.path.join(os.getenv('DATA_DIR', os.getcwd()), user, ntpath.basename(read_path))
 
 
 def _deserialize(data, klass):

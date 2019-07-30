@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enforce JWT on API side
 - Only return results by user ID
 - Replace file input with selects in sample creation
+- Use correct path (user path) to write TSV
 
 ### Removed
 - Remove author_email field as it is redundant and slows down the user
