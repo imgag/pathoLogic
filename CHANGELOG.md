@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2019-07-30
 ### Added
 - Added Uppy Dashboard + XHR based file upload
 - Add controller to upload files
@@ -17,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only return results by user ID
 - Replace file input with selects in sample creation
 - Use correct path (user path) to write TSV
+
+### Fixed
+- Correctly verify the create samples form
 
 ### Removed
 - Remove author_email field as it is redundant and slows down the user
