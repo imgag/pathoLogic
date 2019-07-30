@@ -5,7 +5,7 @@
   >
     <error-modal :active="submissionFailed" @close="submissionFailed = false" :errorMessage="submissionError" v-if="submissionError.length"></error-modal>
     <error-modal :active="submissionFailed" @close="submissionFailed = false" v-else></error-modal>
-    <v-form v-model="valid_config">
+    <v-form>
       <v-flex>
       <h2>Configuration</h2>
       </v-flex>
@@ -273,7 +273,7 @@
           xs-1
           mr-1
         >
-          <v-btn right :disabled="!valid_config || !this.samples.length || duplicate_samples()" @click="saveSamples">Save samples</v-btn>
+          <v-btn right :disabled="this.samples.length < 1 || !all_samples_have_lpath() || !duplicate_samples()" @click="saveSamples">Save samples</v-btn>
         </v-flex>
       </v-layout>
 
@@ -331,7 +331,6 @@ export default {
   },
   data () {
     return {
-      available_files: [],
       headers: [
         {
           text: 'Sample ID',
@@ -363,10 +362,6 @@ export default {
         "canu",
         "flye"
       ],
-      advanced_options: false,
-      valid_config: false,
-      submissionFailed: false,
-      submissionError: "",
       config: {
         minContigLength: 2000,
         targetShortReadCov: 150,
@@ -379,9 +374,11 @@ export default {
         minLength: 5000,
         maxLength: 500000
       },
-      samples: [
-
-      ]
+      advanced_options: false,
+      submissionFailed: false,
+      submissionError: "",
+      samples: [],
+      available_files: []
     }
   },
   mounted () {
@@ -414,9 +411,12 @@ export default {
     })
   },
   methods: {
+    all_samples_have_lpath() {
+      return this.samples.every((sample) => (sample.path_lr !== undefined && sample.path_lr.length))
+    },
     duplicate_samples() {
       // copied this code from SO https://stackoverflow.com/a/50481890
-      return !this.samples.map((s) => s.id).every(function(elem, i, array){return array.lastIndexOf(elem) === i})
+      return this.samples.map((s) => s.id).every(function(elem, i, array){return array.lastIndexOf(elem) === i})
     },
     addSample () {
       this.samples.push({
