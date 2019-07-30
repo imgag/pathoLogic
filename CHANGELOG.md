@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Add logout button
 
+### Change
+- Create a virtual file and download it with access token
+
 ## [0.2.0] - 2019-07-30
 ### Added
 - Added Uppy Dashboard + XHR based file upload
