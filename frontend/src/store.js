@@ -8,6 +8,7 @@ Vue.use(Vuex)
 const REALM = (process.env.AUTH_REALM !== undefined) ? process.env.AUTH_REALM : 'debug'
 const DOMAIN = (process.env.AUTH_DOMAIN !== undefined) ? process.env.AUTH_DOMAIN : 'https://auth.imgag.de'
 const AUTHORIZATION_URL = `${DOMAIN}/auth/realms/${REALM}/protocol/openid-connect/auth`
+const LOGOUT_URL = `${AUTHORIZATION_URL.substring(0, AUTHORIZATION_URL.length - 4)}logout?redirect_uri=${encodeURI(window.origin)}`
 
 let _access_token = null;
 if (window.location.hash.startsWith('#state')) { // indicates that we are processing a redirected application
@@ -40,7 +41,8 @@ export default new Vuex.Store({
   state: {
     samples: [],
     sample_filter_by_ids: [],
-    access_token: _access_token
+    access_token: _access_token,
+    logout_url: LOGOUT_URL
   },
   getters: {
     fetch_defaults(state) {
