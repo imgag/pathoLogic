@@ -111,7 +111,7 @@ def samples_sample_iddelete(sample_id, user):
     for sID in samples:
         sample_folder_path = os.path.join(os.getenv('DATA_DIR', os.getcwd()), user)
         if os.path.exists(sample_folder_path):
-            shutil.rmtree() # remove samples from FS
+            shutil.rmtree(sample_folder_path) # remove samples from FS
         db['samples'].pop(sID) # remove samples from database
 
     return jsonify([{'id': sID} for sID in samples])
