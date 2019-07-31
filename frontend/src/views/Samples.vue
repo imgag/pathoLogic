@@ -7,6 +7,7 @@
   <v-data-table
     :headers="headers"
     :items="$store.getters.samples"
+    items-per-page="15"
   >
     <error-modal :active="statusChangeFailed"></error-modal>
     <template slot="items" slot-scope="props">
@@ -99,16 +100,17 @@ export default {
   },
   methods: {
     deleteSamples () {
-     let vm = this
-      Promise.all(vm.selected_samples.map((sample) => vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${sample}`, {
+      let vm = this
+      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}`, {
         method: 'DELETE'
-      })))
-     .then((values) => Promise.all(values.map((value) => value.json())))
-     .then((responses) => {
-       responses.forEach((response) => {
-       vm.$store.commit('deleteSample', response.id)
       })
-     })
+        .then((response) => response.json())
+        .then((samples) => {
+          samples.forEach((sample) => {
+            vm.$store.commit('deleteSample', sample.id)
+          })
+          vm.selected_samples = []
+        })
     },
     updateSelectedSample (id, event) {
       if (event) {
@@ -120,20 +122,15 @@ export default {
     startSamples () {
       let vm = this
 
-      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
+      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}`, {
         method: 'PUT'
-      }).then((response) => {
-        let status = ""
-        if (response.status === 200) {
-          status = "started"
-        } else {
-          status = "error"
-          vm.statusChangeFailed = true
-        }
-
-        vm.selected_samples.forEach((sample) => {
-          vm.$store.commit('addStatus', { "id": sample, "status": status })
+      })
+      .then((response) => response.json())
+      .then((samples) => {
+        samples.forEach((sample) => {
+          vm.$store.commit('addStatus', { "id": sample.id, "status": sample.status })
         })
+        vm.selected_samples = []
       }).catch(() => vm.statusChangeFailed = true)
     }
   },

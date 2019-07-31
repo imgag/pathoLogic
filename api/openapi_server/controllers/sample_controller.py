@@ -95,9 +95,9 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
         for sID in samples:
             db['samples'][sID]['status'] = 'error'
 
-        raise BadRequest("Process exited with status {}".format(status))
+        return jsonify([{'id': sID, 'status': 'error'} for sID in samples])
 
-    return jsonify([{'id': sID, 'status': 'created'} for sID in samples])
+    return jsonify([{'id': sID, 'status': 'started'} for sID in samples])
 
 
 def samples_sample_iddelete(sample_id, user):
@@ -109,7 +109,9 @@ def samples_sample_iddelete(sample_id, user):
         raise BadRequest("You are trying to start a sample for a different user. I am afraid I can't do that, Dave.")
 
     for sID in samples:
-        shutil.rmtree(os.path.join(os.getenv('DATA_DIR', os.getcwd()), user)) # remove samples from FS
-        db.pop(sID) # remove samples from database
+        sample_folder_path = os.path.join(os.getenv('DATA_DIR', os.getcwd()), user)
+        if os.path.exists(sample_folder_path):
+            shutil.rmtree() # remove samples from FS
+        db['samples'].pop(sID) # remove samples from database
 
-    return jsonify([{'id': sID, 'status': 'created'} for sID in samples])
+    return jsonify([{'id': sID} for sID in samples])
