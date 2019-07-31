@@ -397,7 +397,7 @@ export default {
       height: 250
     })
     uppy.use(XHRUpload, {
-      endpoint: 'http://localhost:8080/v1/upload',
+      endpoint: `${vm.$basePath}/upload`,
       formData: true,
       fieldName: 'uploaded_file',
       headers: {

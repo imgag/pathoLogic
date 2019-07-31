@@ -33,13 +33,14 @@ A release version might be created in the future
 
 You can change the following environment variables to change the folder locations for run and sample folder used by pathoLogic. All `fastq` input files need to be moved to the the `samples` folder (default: pathologic/samples). 
 
-| Env variable | Description                                | Default       |
-|--------------|--------------------------------------------|---------------|
-|  BASE_DIR    | Location of run and sample folder          |  $PWD         |
-|  DATA_DIR    | Location of read files                     |  $PWD/samples |
-|  PRODUCTION  | Wether or not the service is in production |  False        |
-|  AUTH_DOMAIN | Which domain to use for authentication     | auth.imgag.de |
-|  AUTH_REALM  | Which realm to use for authentication      | debug         |
+| Env variable | Description                                | Default        |
+|--------------|--------------------------------------------|----------------|
+|  BASE_DIR    | Location of run and sample folder          |  $PWD          |
+|  DATA_DIR    | Location of read files                     |  $PWD/samples  |
+|  PRODUCTION  | Wether or not the service is in production |  False         |
+|  AUTH_DOMAIN | Which domain to use for authentication     | auth.imgag.de  |
+|  AUTH_REALM  | Which realm to use for authentication      | debug          |
+|  ENDPOINT    | Which endpoint to use for the frontend     | localhost:8080 |
 
 ## 4) Install python requirements
 

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add refresh button
 
 ### Change
+- Add correct environment variable
 - Create a virtual file and download it with access token
 - Change default icons per page to 10
 
