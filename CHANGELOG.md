@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add logout button
+- Add delete button in frontend
 
 ### Change
 - Create a virtual file and download it with access token
+- Submit sample one by one when starting or deleting
+- Make it possible to resubmit samples
 
 ### Removed
 - Remove status_get_id controller because it was not used in the project

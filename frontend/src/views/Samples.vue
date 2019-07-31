@@ -17,7 +17,7 @@
       <td>{{ props.item.created }}</td>
       <td>{{ props.item.last_updated }}</td>
       <td><status :status="props.item.status"></status></td>
-      <td v-if="props.item.status === 'created'">
+      <td v-if="['created', 'error'].includes(props.item.status)">
         <v-checkbox @change="updateSelectedSample(props.item.id, $event)"/>
       </td>
       <td v-else/>
@@ -33,10 +33,10 @@
       />
     </td>
     <td colspan="1">
-
+      <v-btn :disabled="selected_samples.length < 1" @click="startSamples">Start sample(s)</v-btn>
     </td>
     <td colspan="1">
-      <v-btn :disabled="selected_samples.length < 1" @click="startSamples">Start sample(s)</v-btn>
+      <v-btn :disabled="selected_samples.length < 1" @click="deleteSamples">Delete sample(s)</v-btn>
     </td>
   </template>
   </v-data-table>
@@ -105,24 +105,32 @@ export default {
         this.selected_samples = this.selected_samples.filter((s) => s !== id)
       }
     },
+    deleteSamples () {
+      let vm = this
+      Promise.all(vm.selected_samples.map((sample) => vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${sample}`, {
+        method: 'DELETE'
+      })))
+      .then((values) => Promise.all(values.map((value) => value.json())))
+      .then((responses) => {
+        responses.forEach((response) => {
+          vm.$store.commit('deleteSample', response.id)
+        })
+      })
+    },
     startSamples () {
       let vm = this
-
-      vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${vm.selected_samples.join(',')}/start`, {
+      Promise.all(vm.selected_samples.map((sample) => vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${sample}`, {
         method: 'PUT'
-      }).then((response) => {
-        let status = ""
-        if (response.status === 200) {
-          status = "started"
-        } else {
-          status = "error"
-          vm.statusChangeFailed = true
-        }
-
-        vm.selected_samples.forEach((sample) => {
-          vm.$store.commit('addStatus', { "id": sample, "status": status })
+      })))
+      .then((values) => Promise.all(values.map((value) => value.json())))
+      .then((responses) => {
+        responses.forEach((response) => {
+          vm.$store.commit('addStatus', {'id': response.id, 'status': response.status})
         })
-      }).catch(() => vm.statusChangeFailed = true)
+      })
+      .catch(() => {
+        vm.statusChangeFailed = true
+      })
     }
   },
   mounted () {
