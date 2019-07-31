@@ -2,12 +2,12 @@ import uuid
 import os
 import shutil
 
+from flask import jsonify
 from werkzeug.exceptions import BadRequest
 from openapi_server.db import get_db
-from openapi_server.models.inline_response200 import InlineResponse200  # noqa: E501
 
 
-def samples_sample_id_start_put(sample_id):  # noqa: E501
+def samples_sample_idput(sample_id, user):  # noqa: E501
     """Starts one or multiple sample via ID
 
      # noqa: E501
@@ -15,8 +15,22 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
     :param sample_id:
     :type sample_id: List[str]
 
-    :rtype: InlineResponse200
+    :rtype: jsonify
     """
+
+    # Get current database
+    db = get_db()
+
+    samples = sample_id.split(',')
+
+    if not all(map(lambda sample: db['samples'][sample]['user_id'] == user, samples)):
+        raise BadRequest("You are trying to start a sample for a different user. I am afraid I can't do that, Dave.")
+
+    # Set sample status to started
+    for sID in samples:
+        db['samples'][sID]['status'] = 'started'
+
+    #Try to run all this stuff
     # Create run folder
     runspath = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'runs')
     if not os.path.isdir(runspath):
@@ -31,17 +45,12 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
     nf_hybridassembly = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'hybridassembly', 'main.nf')
     nf_plasmident = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'plasmIDent', 'main.nf')
 
-    # Get current database
-    db = get_db()
-
-    samples = sample_id.split(',')
-    db['runs'][runid] = samples
-
     # Set sample status to started
     for sID in samples:
         db['samples'][sID]['status'] = 'started'
 
-    #Try to run all this stuff
+    # Assign samples to run
+    db['runs'][runid] = samples
 
     # Copy input and config files to run folder
     status = 0
@@ -88,4 +97,19 @@ def samples_sample_id_start_put(sample_id):  # noqa: E501
 
         raise BadRequest("Process exited with status {}".format(status))
 
-    return 'successful'
+    return jsonify([{'id': sID, 'status': 'created'} for sID in samples])
+
+
+def samples_sample_iddelete(sample_id, user):
+    # Get current database
+    db = get_db()
+
+    samples = sample_id.split(',')
+    if not all(map(lambda sample: db['samples'][sample]['user_id'] == user, samples)):
+        raise BadRequest("You are trying to start a sample for a different user. I am afraid I can't do that, Dave.")
+
+    for sID in samples:
+        shutil.rmtree(os.path.join(os.getenv('DATA_DIR', os.getcwd()), user)) # remove samples from FS
+        db.pop(sID) # remove samples from database
+
+    return jsonify([{'id': sID, 'status': 'created'} for sID in samples])

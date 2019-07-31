@@ -119,9 +119,9 @@ paths:
       tags:
       - samples
       x-openapi-router-controller: openapi_server.controllers.samples_controller
-  /samples/{sampleID}/start:
-    put:
-      operationId: samples_sample_id_start_put
+  /samples/{sampleID}:
+    delete:
+      operationId: samples_sample_iddelete
       parameters:
       - explode: false
         in: path
@@ -133,9 +133,34 @@ paths:
       responses:
         200:
           content:
-            '*/*':
+            application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                type: array
+          description: successful
+      summary: Deletes one or multiple sample via ID
+      tags:
+      - sample
+      x-openapi-router-controller: openapi_server.controllers.sample_controller
+    put:
+      operationId: samples_sample_idput
+      parameters:
+      - explode: false
+        in: path
+        name: sampleID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                type: array
           description: successful
       summary: Starts one or multiple sample via ID
       tags:

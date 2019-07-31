@@ -123,29 +123,55 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Sample"
-  "/samples/{sampleID}/start":
+  "/samples/{sampleID}":
     put:
       tags:
         - sample
       summary: Starts one or multiple sample via ID
       parameters:
-        - name: sampleID
-          in: path
-          required: true
-          schema:
-            type: string
+      - name: sampleID
+        in: path
+        required: true
+        schema:
+          type: string
       responses:
         "200":
           description: successful
           content:
-            "*/*":
+            application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                  status:
-                    $ref: "#/components/schemas/Status"
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      $ref: "#/components/schemas/Status"
+    delete:
+      tags:
+        - sample
+      summary: Deletes one or multiple sample via ID
+      parameters: 
+      - name: sampleID
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: successful
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    status:
+                      $ref: "#/components/schemas/Status"
   "/result/{sampleID}":
     get:
       tags:
