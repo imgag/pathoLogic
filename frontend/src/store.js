@@ -5,8 +5,8 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-const REALM = (process.env.AUTH_REALM !== undefined && process.env.AUTH_REALM.length) ? process.env.AUTH_REALM : 'debug'
-const DOMAIN = (process.env.AUTH_DOMAIN !== undefined) ? process.env.AUTH_DOMAIN : 'https://auth.imgag.de'
+const REALM = (process.env.VUE_APP_AUTH_REALM !== undefined && process.env.VUE_APP_AUTH_REALM.length) ? process.env.VUE_APP_AUTH_REALM : 'debug'
+const DOMAIN = (process.env.VUE_APP_AUTH_DOMAIN !== undefined) ? process.env.VUE_APP_AUTH_DOMAIN : 'https://auth.imgag.de'
 const AUTHORIZATION_URL = `${DOMAIN}/auth/realms/${REALM}/protocol/openid-connect/auth`
 const LOGOUT_URL = `${AUTHORIZATION_URL.substring(0, AUTHORIZATION_URL.length - 4)}logout?redirect_uri=${encodeURI(window.origin)}`
 
