@@ -406,7 +406,7 @@ export default {
     })
     uppy.on('complete', result => {
       if (result.successful.length) {
-        vm.available_files.push(result.successful.map((s) => s.name))
+        vm.available_files.push(...result.successful.map((s) => s.name))
       }
     })
   },
