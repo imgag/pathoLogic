@@ -5,13 +5,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.1] - 2019-07-31
 ### Added
 - Add delete controller to API
 - Add delete button and make it possible to delete and restart in the frontend.
 - Add logout button
+- Add refresh button
 
 ### Change
 - Create a virtual file and download it with access token
+- Change default icons per page to 10
 
 ### Removed
 - Remove status_get_id controller because it was not used in the project

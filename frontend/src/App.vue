@@ -5,6 +5,12 @@
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-sm-and-down">
         <v-btn
+            @click="reload"
+            icon
+        >
+            <v-icon>autorenew</v-icon>
+        </v-btn>
+        <v-btn
             :href="$store.state.logout_url"
             icon
         >
@@ -31,6 +37,17 @@
     </v-btn>
   </v-app>
 </template>
+
+<script>
+export default {
+  name: 'App',
+  methods: {
+    reload () {
+      window.location.reload() // eslint-disable-line no-undef
+    }
+  }
+}
+</script>
 
 <style scoped>
 .router-link {

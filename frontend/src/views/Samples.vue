@@ -7,7 +7,7 @@
   <v-data-table
     :headers="headers"
     :items="$store.getters.samples"
-    items-per-page="15"
+    :items-per-page="15"
   >
     <error-modal :active="statusChangeFailed"></error-modal>
     <template slot="items" slot-scope="props">
