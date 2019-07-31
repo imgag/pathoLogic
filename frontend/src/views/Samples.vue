@@ -17,7 +17,7 @@
       <td>{{ props.item.created }}</td>
       <td>{{ props.item.last_updated }}</td>
       <td><status :status="props.item.status"></status></td>
-      <td v-if="props.item.status === 'created'">
+      <td v-if="['created', 'error'].includes(props.item.status)">
         <v-checkbox @change="updateSelectedSample(props.item.id, $event)"/>
       </td>
       <td v-else/>
@@ -33,10 +33,10 @@
       />
     </td>
     <td colspan="1">
-
+      <v-btn :disabled="selected_samples.length < 1" @click="startSamples">Start sample(s)</v-btn>
     </td>
     <td colspan="1">
-      <v-btn :disabled="selected_samples.length < 1" @click="startSamples">Start sample(s)</v-btn>
+      <v-btn :disabled="selected_samples.length < 1" @click="deleteSamples">Delete sample(s)</v-btn>
     </td>
   </template>
   </v-data-table>
@@ -98,6 +98,18 @@ export default {
     }
   },
   methods: {
+    deleteSamples () {
+     let vm = this
+      Promise.all(vm.selected_samples.map((sample) => vm.$store.getters.fetch_defaults(`${vm.$basePath}/samples/${sample}`, {
+        method: 'DELETE'
+      })))
+     .then((values) => Promise.all(values.map((value) => value.json())))
+     .then((responses) => {
+       responses.forEach((response) => {
+       vm.$store.commit('deleteSample', response.id)
+      })
+     })
+    },
     updateSelectedSample (id, event) {
       if (event) {
         if (!this.selected_samples.includes(id)) this.selected_samples.push(id)

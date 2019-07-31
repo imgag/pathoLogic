@@ -60,6 +60,11 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    deleteSample (state, id) {
+      let sample = state.samples.find((s) => s.id === id)
+      let index = state.samples.indexOf(sample)
+      state.samples.splice(index, 1)
+    },
     addSamples (state, samples) {
       state.samples = samples
     },

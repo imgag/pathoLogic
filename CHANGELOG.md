@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Add delete button and make it possible to delete and restart in the frontend.
 - Add logout button
 
 ### Change
