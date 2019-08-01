@@ -30,7 +30,7 @@ export default {
     },
     methods: {
       downloadArchive() {
-        let results_name = `${this.route.params.id}_results.zip`
+        let results_name = `${this.$route.params.id}_results.zip`
         this.$store.getters.fetch_defaults(this.zip_url).then((response) => response.blob()).then((blobby) => {
           let anchor = document.createElement('a')
           let objectURL = window.URL.createObjectURL(blobby)
