@@ -428,15 +428,8 @@ export default {
       let samples = vm.samples.map((sample) => {
         sample = {
           ...sample,
-          path_lr: sample.path_lr[0],
           created: new Date().toISOString(),
           last_updated: new Date().toISOString()
-        }
-        if (sample.path_sr1 !== undefined) {
-          sample.path_sr1 = sample.path_sr1[0]
-        }
-        if (sample.path_sr2 !== undefined) {
-          sample.path_sr2 = sample.path_sr2[0]
         }
         return sample
       })
