@@ -85,9 +85,10 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
     if status == 0:
         for sID in samples:
             # Zip output folders
-            zip_path = os.path.join(runpath,  sID + '_pathoLogic_results')
-            shutil.make_archive(zip_path, 'zip', runpath)
-            db['samples'][sID]['zip'] = zip_path+'.zip'
+            zip_path = os.path.join(runpath,  sID)
+            zip_name = os.path.join(zip_path, sID + '_pathoLogic_results')
+            shutil.make_archive(zip_name, 'zip', root_dir=zip_path, base_dir=zip_path)
+            db['samples'][sID]['zip'] = zip_name + '.zip'
             
             # Store ref to summary statistics file in db
             stats_file = os.path.join(runpath, sID, "qc", "qc_summary_" + sID + '.json')
