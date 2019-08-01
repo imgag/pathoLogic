@@ -71,7 +71,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
              "-params-file nf_config.json -with-weblog " +
              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
     print(call_ha)
-    status += os.system("cd " + runpath + " && " + call_ha + "&")
+    status += os.system("cd " + runpath + " && " + call_ha)
 
     # Run plasmident
     call_pi =  (nfexecutable + " run " + nf_plasmident + " -profile app " +
@@ -80,7 +80,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
               "-params-file nf_config.json -with-weblog "+
               "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_plasmident/" + runid)
     print(call_pi)
-    status += os.system("cd " + runpath + " && " + call_ha + "&")
+    status += os.system("cd " + runpath + " && " + call_pi)
 
     if status == 0:
         for sID in samples:
