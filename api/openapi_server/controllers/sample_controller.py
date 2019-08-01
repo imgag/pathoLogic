@@ -68,7 +68,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
              " run " + nf_hybridassembly + "  -profile app " +
              " --outDir " + runpath +
              " --input read_locations.tsv " +
-             "-params-file nf_config.json -with-weblog" +
+             "-params-file nf_config.json -with-weblog " +
              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
     print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha + "&")
