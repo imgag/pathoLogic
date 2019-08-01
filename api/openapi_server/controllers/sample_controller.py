@@ -83,13 +83,14 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
     status += os.system("cd " + runpath + " && " + call_ha + "&")
 
     if status == 0:
-        # Zip output folders
-        zip_path = os.path.join(runspath, (runid[0:7] + 'pathoLogic_results'))
-        stats_file = os.path.join(runspath, (runid[0:7] + 'results.json')) #TODO Check corect path
-
-        shutil.make_archive(zip_path, 'zip', runpath)
         for sID in samples:
+            # Zip output folders
+            zip_path = os.path.join(runpath,  sID + '_pathoLogic_results')
+            shutil.make_archive(zip_path, 'zip', runpath)
             db['samples'][sID]['zip'] = zip_path+'.zip'
+            
+            # Store ref to summary statistics file in db
+            stats_file = os.path.join(runpath, sID, "qc", "qc_summary_" + sID + '.json')
             db['samples'][sID]['assembly_stats'] = stats_file
     else:
         # Set sample status to errored
