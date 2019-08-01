@@ -69,7 +69,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
              " --outDir " + runpath +
              " --input read_locations.tsv " +
              "-params-file nf_config.json -with-weblog" +
-             "http://"+os.environ.get('ENDPOINT',"localhost:8080")+"/v1/nf_assembly/" + runid)
+             "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
     print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha + "&")
 
@@ -78,7 +78,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
               " --outDir " + runpath +
               " --input file_paths_plasmident.tsv " +
               "-params-file nf_config.json -with-weblog "+
-              "http://"+os.environ.get('ENDPOINT',"localhost:8080")+"/v1/nf_plasmident/" + runid)
+              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_plasmident/" + runid)
     print(call_pi)
     status += os.system("cd " + runpath + " && " + call_ha + "&")
 
