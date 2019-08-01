@@ -41,6 +41,7 @@ You can change the following environment variables to change the folder location
 |  AUTH_DOMAIN | Which domain to use for authentication     | auth.imgag.de  |
 |  AUTH_REALM  | Which realm to use for authentication      | debug          |
 |  ENDPOINT    | Which endpoint to use for the frontend     | localhost:8080 |
+|  HTTP_PORT   | Port to host                               | 8080           |
 
 ## 4) Install python requirements
 
