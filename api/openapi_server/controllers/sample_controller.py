@@ -64,18 +64,16 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
 
     # Run Hybrid assembly
     
-    call_ha = ("cd " + runpath + " && " + "hybridassembly -profile app " +
+    call_ha = ("cd " + runpath + " && " + "hybridassembly -profile app,singularity " +
              " --outDir " + runpath +
-             " --input read_locations.tsv " +
              "-params-file nf_config.json -with-weblog " +
              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
     print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha)
 
     # Run plasmident
-    call_pi =  ("plasmIDent  -profile app " +
+    call_pi =  ("plasmIDent  -profile app,singularity " +
               " --outDir " + runpath +
-              " --input file_paths_plasmident.tsv " +
               "-params-file nf_config.json -with-weblog "+
               "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_plasmident/" + runid)
     print(call_pi)
