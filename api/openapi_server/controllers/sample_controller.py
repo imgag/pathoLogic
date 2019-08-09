@@ -66,7 +66,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
     
     call_ha = ("cd " + runpath + " && " + "hybridassembly -profile app,singularity " +
              " --outDir " + runpath +
-             "-params-file nf_config.json -with-weblog " +
+             " -params-file nf_config.json -with-weblog " +
              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
     print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha)
@@ -74,7 +74,7 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
     # Run plasmident
     call_pi =  ("plasmIDent  -profile app,singularity " +
               " --outDir " + runpath +
-              "-params-file nf_config.json -with-weblog "+
+              " -params-file nf_config.json -with-weblog "+
               "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_plasmident/" + runid)
     print(call_pi)
     status += os.system("cd " + runpath + " && " + call_pi)
