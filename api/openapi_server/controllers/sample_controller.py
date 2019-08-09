@@ -1,6 +1,7 @@
 import uuid
 import os
 import shutil
+import json
 
 from flask import jsonify
 from werkzeug.exceptions import BadRequest
@@ -49,8 +50,10 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
     for sID in samples:
         db['samples'][sID]['status'] = 'started'
 
-    # Assign samples to run
+    # Initialize new run
     db['runs'][runid] = samples
+    db['runs'][runid]['status_hybridassembly'] = 'waiting'
+    db['runs'][runid]['status_plasmident'] = 'waiting'
 
     # Copy input and config files to run folder
     status = 0
@@ -68,7 +71,6 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
              " --outDir " + runpath +
              " -params-file nf_config.json -with-weblog " +
              "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_assembly/" + runid)
-    print(call_ha)
     status += os.system("cd " + runpath + " && " + call_ha)
 
     # Run plasmident
@@ -76,20 +78,28 @@ def samples_sample_idput(sample_id, user):  # noqa: E501
               " --outDir " + runpath +
               " -params-file nf_config.json -with-weblog "+
               "http://localhost:"+os.environ.get('HTTP_PORT',"8080")+"/v1/nf_plasmident/" + runid)
-    print(call_pi)
     status += os.system("cd " + runpath + " && " + call_pi)
 
     if status == 0:
         for sID in samples:
             # Zip output folders
-            zip_path = os.path.join(runpath,  sID)
-            zip_name = os.path.join(zip_path, sID + '_pathoLogic_results')
-            shutil.make_archive(zip_name, 'zip', root_dir=zip_path, base_dir=zip_path)
-            db['samples'][sID]['zip'] = zip_name + '.zip'
-            
+            result_folder = os.path.join(runpath, sID)
+            sample_folder = os.path.join(os.environ.get('BASE_DIR', os.getcwd()), 'samples', sID)
+            zip_file = sample_folder + '_pathoLogic_results'
+            shutil.make_archive(zip_file, 'zip', root_dir=result_folder, base_dir=result_folder)
+            db['samples'][sID]['zip'] = zip_file + '.zip'
+
+            # Read summary statistics into database
+            qc_summary_file = os.join(result_folder, 'qc', 'qc_summary' + sID + '.json')
+            shutil.copyfile(qc_summary_file, os.path.join(result_folder, sID + "qc_summary.json"))
+            with open(qc_summary_file) as json_file:
+                qc_stats = json.load(json_file)
+                db['samples'][sID]['qc'] = qc_stats
+
             # Store ref to summary statistics file in db
             stats_file = os.path.join(runpath, sID, "qc", "qc_summary_" + sID + '.json')
             db['samples'][sID]['assembly_stats'] = stats_file
+            db['samples'][sID]['status'] = 'finished'
     else:
         # Set sample status to errored
         for sID in samples:

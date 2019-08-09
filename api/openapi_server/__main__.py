@@ -38,11 +38,9 @@ def main():
     def nf_assembly(runid):
         req_data = request.get_json()
         db = get_db()
-        db['status_hybridassembly'][runid] = req_data
-        #print(json.dumps(db['status_assembly'][runid]))
-        if req_data['event'] == 'process_completed':
-            for sID in db['runs'][runid]:
-                db['samples'][sID]['status'] = 'finished'
+        db['runs'][runid]['log_hybridassembly'] = req_data
+        if req_data['event'] not in ['process_submitted', 'process_started', 'process_completed']:
+            db['runs'][runid]['status_plasmident'] = req_data['event']
         return 'NF Request received'
 
     # Create route for nextflow weblog (plasmident)
@@ -50,11 +48,9 @@ def main():
     def nf_plasmident(runid):
         req_data = request.get_json()
         db = get_db()
-        db['status_plasmident'][runid] = req_data
-        #print(json.dumps(db['status_plasmident'][runid]))
-        if req_data['event'] == 'process_completed':
-            for sID in db['runs'][runid]:
-                db['samples'][sID]['status'] = 'finished'
+        db['runs'][runid]['log_plasmident'] = req_data
+        if req_data['event'] not in ['process_submitted', 'process_started', 'process_completed']:
+            db['runs'][runid]['status_plasmident'] = req_data['event']
         return 'NF Request received'
 
     production = os.getenv('PRODUCTION', False)
